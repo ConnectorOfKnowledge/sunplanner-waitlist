@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SunPlanner — Solar Forecast for Off-Grid Life</title>
+  <meta name="description" content="Know how much power you'll generate at your next spot — before you commit the drive. Built for off-grid nomads.">
+  <meta property="og:title" content="SunPlanner — Solar Forecast for Off-Grid Life">
+  <meta property="og:description" content="Know how much power you'll generate at your next spot — before you commit the drive.">
+  <meta name="theme-color" content="#080714">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --solar: #F5E14A;
+      --solar-dim: rgba(245, 225, 74, 0.18);
+      --solar-border: rgba(245, 225, 74, 0.20);
+      --night: #080714;
+      --deep: #0C0B1C;
+      --panel: rgba(8, 7, 20, 0.80);
+      --panel-border: rgba(255, 255, 255, 0.09);
+      --text: #FFFFFF;
+      --text-muted: rgba(255, 255, 255, 0.50);
+      --radius: 4px;
+      --font-head: 'Space Grotesk', system-ui, sans-serif;
+      --font-mono: 'DM Mono', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--night);
+      color: var(--text);
+      font-family: var(--font-head);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── HERO ──────────────────────────────────────── */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 560px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #sky-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 0 24px;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--solar);
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      color: #FFFFFF;
+      text-shadow: 0 2px 32px rgba(0,0,0,0.55), 0 0 80px rgba(0,0,0,0.30);
+      margin-bottom: 18px;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      font-weight: 400;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.65;
+      max-width: 440px;
+      margin: 0 auto 36px;
+      text-shadow: 0 1px 16px rgba(0,0,0,0.6);
+    }
+
+    /* CTA zone */
+    #cta-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 11px;
+    }
+
+    /* Waitlist form */
+    .waitlist-form {
+      display: flex;
+      max-width: 420px;
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+
+    .waitlist-form input[type="email"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 13px 16px;
+      font-size: 14px;
+      font-family: var(--font-head);
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .waitlist-form input[type="email"]::placeholder {
+      color: var(--text-muted);
+    }
+
+    .waitlist-form button[type="submit"] {
+      background: var(--solar);
+      color: var(--night);
+      border: none;
+      padding: 13px 20px;
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+      transition: background 0.12s;
+      flex-shrink: 0;
+    }
+
+    .waitlist-form button[type="submit"]:hover:not(:disabled) {
+      background: #ffe840;
+    }
+
+    .waitlist-form button[type="submit"]:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .form-note {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    .form-error {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: #FF6B6B;
+      letter-spacing: 0.05em;
+    }
+
+    /* Google Play button (live mode) */
+    .play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--solar);
+      color: var(--night);
+      text-decoration: none;
+      padding: 13px 26px;
+      border-radius: var(--radius);
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.005em;
+      transition: background 0.12s, transform 0.12s;
+    }
+
+    .play-btn:hover {
+      background: #ffe840;
+      transform: translateY(-1px);
+    }
+
+    .play-btn svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Scroll cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.38;
+      animation: cue-bob 2.4s ease-in-out infinite;
+    }
+
+    .scroll-cue span {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .scroll-cue svg {
+      width: 16px;
+      height: 16px;
+      color: #fff;
+    }
+
+    @keyframes cue-bob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(5px); }
+    }
+
+    /* ─── SHARED SECTION CHROME ─────────────────────── */
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ─── TESTERS ───────────────────────────────────── */
+    #testers {
+      background: var(--deep);
+      padding: 96px 0;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.055);
+    }
+
+    .tester-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--solar);
+      border: 1px solid var(--solar-border);
+      border-radius: 2px;
+      padding: 5px 11px;
+      margin-bottom: 28px;
+      text-transform: uppercase;
+    }
+
+    #testers h2 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.022em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    #testers p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.58);
+      line-height: 1.75;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ─── BENEFITS ──────────────────────────────────── */
+    #benefits {
+      background: var(--night);
+      padding: 96px 0;
+      border-top: 1px solid rgba(255,255,255,0.055);
+    }
+
+    #benefits > .container > h2 {
+      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.022em;
+      margin-bottom: 56px;
+      text-align: center;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      border: 1px solid rgba(255,255,255,0.065);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(255,255,255,0.065);
+    }
+
+    .benefit {
+      padding: 36px 30px;
+      background: var(--deep);
+    }
+
+    .benefit-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--solar);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .benefit h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .benefit p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.50);
+    }
+
+    /* ─── FOOTER ────────────────────────────────────── */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid rgba(255,255,255,0.055);
+      padding: 44px 0;
+    }
+
+    footer .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--solar);
+      font-weight: 500;
+    }
+
+    .footer-nav a {
+      color: rgba(255,255,255,0.38);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      transition: color 0.12s;
+    }
+
+    .footer-nav a:hover { color: rgba(255,255,255,0.72); }
+
+    .footer-copy {
+      font-size: 11px;
+      color: rgba(255,255,255,0.20);
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── SUCCESS MODAL ─────────────────────────────── */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 7, 20, 0.86);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .modal.hidden { display: none; }
+
+    .modal-box {
+      background: #110F25;
+      border: 1px solid var(--solar-border);
+      border-radius: 6px;
+      padding: 44px 38px;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+    }
+
+    .modal-check {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--solar-dim);
+      border: 1px solid var(--solar-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      font-size: 20px;
+      color: var(--solar);
+      font-weight: 700;
+    }
+
+    .modal-box h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .modal-box p {
+      color: rgba(255,255,255,0.55);
+      line-height: 1.65;
+      margin-bottom: 26px;
+      font-size: 0.92rem;
+    }
+
+    .modal-box button {
+      background: var(--solar);
+      color: var(--night);
+      border: none;
+      padding: 11px 26px;
+      border-radius: var(--radius);
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: background 0.12s;
+    }
+
+    .modal-box button:hover { background: #ffe840; }
+
+    /* ─── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 440px) {
+      .waitlist-form {
+        flex-direction: column;
+      }
+      .waitlist-form input[type="email"] {
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding: 13px 14px;
+      }
+      .waitlist-form button[type="submit"] {
+        padding: 13px 14px;
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-cue { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ MODE CONFIG — change "waitlist" to "live" when the app launches ══ -->
+  <script>const SITE_MODE = "waitlist";</script>
+
+  <!-- ══ HERO ════════════════════════════════════════ -->
+  <section id="hero" role="banner">
+    <canvas id="sky-canvas" aria-hidden="true"></canvas>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Solar Forecasting · Off-Grid Living</p>
+      <h1>Your harvest,<br>before you move.</h1>
+      <p class="hero-sub">Know how much power you'll generate at your next spot — before you commit the drive.</p>
+      <div id="cta-zone"></div>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span>scroll</span>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 3v10M4 9l4 4 4-4"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ══ TESTERS ══════════════════════════════════════ -->
+  <section id="testers">
+    <div class="container">
+      <div class="tester-badge">Early Tester Program</div>
+      <h2>Help shape it.<br>Get a year free.</h2>
+      <p>SunPlanner is entering closed beta on Android. Join the tester list and you get the premium tier free for a full year at launch — no credit card, no auto-billing, no catch.</p>
+    </div>
+  </section>
+
+  <!-- ══ BENEFITS ═════════════════════════════════════ -->
+  <section id="benefits">
+    <div class="container">
+      <h2>Stop guessing. Start forecasting.</h2>
+      <div class="benefits-grid">
+        <div class="benefit">
+          <div class="benefit-label">Forecast</div>
+          <h3>Know before you park</h3>
+          <p>Pull up any GPS point and see projected kWh output before you make the drive. Move with the numbers, not a gut feeling.</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-label">Outlook</div>
+          <h3>16-day solar view</h3>
+          <p>Real cloud cover data, angle-corrected math for your specific panel setup, and a bar chart built around how an off-grid day actually runs.</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-label">Sun Finder</div>
+          <h3>Point and find the sun</h3>
+          <p>Hold your phone up and see exactly where the sun rises, peaks, and sets for your exact spot. Stop parking blind in the shade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ═══════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-brand">SUNPLANNER</div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/privacy">Privacy Policy</a>
+      </nav>
+      <p class="footer-copy">© 2026 SunPlanner · Built for life off-grid</p>
+    </div>
+  </footer>
+
+  <!-- ══ SUCCESS MODAL ════════════════════════════════ -->
+  <div id="success-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal-box">
+      <div class="modal-check" aria-hidden="true">✓</div>
+      <h3 id="modal-heading">You're on the list.</h3>
+      <p>We'll reach out when testing opens. Early testers get the full app free for a year.</p>
+      <button id="modal-close">Got it</button>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ════════════════════════════════════════════════════════
+    // MODE SWITCH — injects CTA based on SITE_MODE constant
+    // ════════════════════════════════════════════════════════
+    const ctaZone = document.getElementById('cta-zone');
+
+    if (typeof SITE_MODE !== 'undefined' && SITE_MODE === 'live') {
+      ctaZone.innerHTML = `
+        <a href="https://play.google.com/store/apps/details?id=com.sunplanner.app"
+           class="play-btn" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+            <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l232.4-232.4L47 0zm389.2 210.1L418.5 198 325.3 256l93.2 57.9 18.7-12.1c16.1-9.3 26.8-26.5 26.8-45.8s-10.7-36.5-26.8-45.9zm-113.5 75.7L47 477c3.7 1.9 7.6 2.9 11.5 2.9 5.9 0 11.7-1.9 17.1-5.5l280.4-161.2-53-28.4z"/>
+          </svg>
+          Download on Google Play
+        </a>`;
+    } else {
+      ctaZone.innerHTML = `
+        <form class="waitlist-form" id="waitlist-form" novalidate>
+          <label for="email-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Email address</label>
+          <input type="email" id="email-input" name="email"
+                 placeholder="your@email.com" autocomplete="email" required>
+          <button type="submit">Join waitlist</button>
+        </form>
+        <p class="form-note">Free year for early testers &middot; No spam</p>`;
+      bindForm();
+    }
+
+    // ════════════════════════════════════════════════════════
+    // FORM HANDLING
+    // ════════════════════════════════════════════════════════
+    function bindForm() {
+      const form = document.getElementById('waitlist-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const emailInput = form.querySelector('input[type="email"]');
+        const btn = form.querySelector('button[type="submit"]');
+        const email = emailInput.value.trim();
+
+        clearError();
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showError('Enter a valid email address.');
+          emailInput.focus();
+          return;
+        }
+
+        btn.textContent = 'Sending…';
+        btn.disabled = true;
+
+        try {
+          const res = await fetch('/api/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email }),
+          });
+
+          if (!res.ok) {
+            const data = await res.json().catch(function () { return {}; });
+            throw new Error(data.error || 'Submission failed.');
+          }
+
+          emailInput.value = '';
+          openModal();
+        } catch (err) {
+          showError('Something went wrong — try again.');
+          console.error(err);
+        } finally {
+          btn.textContent = 'Join waitlist';
+          btn.disabled = false;
+        }
+      });
+
+      function showError(msg) {
+        var el = document.querySelector('.form-error');
+        if (!el) {
+          el = document.createElement('p');
+          el.className = 'form-error';
+          ctaZone.appendChild(el);
+        }
+        el.textContent = msg;
+      }
+
+      function clearError() {
+        var el = document.querySelector('.form-error');
+        if (el) el.remove();
+      }
+    }
+
+    function openModal() {
+      var modal = document.getElementById('success-modal');
+      modal.classList.remove('hidden');
+      document.getElementById('modal-close').focus();
+    }
+
+    document.getElementById('modal-close').addEventListener('click', function () {
+      document.getElementById('success-modal').classList.add('hidden');
+    });
+
+    document.getElementById('success-modal').addEventListener('click', function (e) {
+      if (e.target === this) this.classList.add('hidden');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('success-modal').classList.add('hidden');
+      }
+    });
+
+    // ════════════════════════════════════════════════════════
+    // SKY CANVAS — "watch a day of solar power happen"
+    // ════════════════════════════════════════════════════════
+    var canvas = document.getElementById('sky-canvas');
+    var ctx = canvas.getContext('2d');
+    var W, H;
+    var cycle = 0.13; // Start just before dawn
+    var lastTs = null;
+    var CYCLE_SECS = 28; // one full day in 28 seconds
+
+    // Sky color stops: [time, [topR,G,B], [bottomR,G,B]]
+    var SKY = [
+      [0.00, [8,   6,  20], [16, 12, 34]],   // deep night
+      [0.10, [26, 16, 52], [72, 30, 52]],    // pre-dawn purple
+      [0.17, [110, 44, 36],[215, 90, 55]],   // dawn fire
+      [0.24, [215,120, 68],[240,178, 96]],   // golden hour
+      [0.33, [58,140,205],[132,194,236]],    // morning blue
+      [0.50, [22, 96,158], [88,172,220]],    // solar noon
+      [0.65, [30,112,178],[118,188,230]],    // afternoon
+      [0.73, [196, 74, 28],[238,142, 56]],   // sunset
+      [0.81, [105, 36, 36],[40, 20, 62]],   // dusk
+      [0.89, [16, 12, 40], [10,  8, 24]],   // evening
+      [1.00, [8,   6,  20], [16, 12, 34]],   // night
+    ];
+
+    // Stars: [xFrac, yFrac, radius, baseAlpha]
+    var STARS = (function () {
+      var s = [], seed = 42;
+      function rand() { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; }
+      for (var i = 0; i < 90; i++) {
+        s.push([rand(), rand() * 0.78, rand() * 1.3 + 0.3, rand() * 0.75 + 0.25]);
+      }
+      return s;
+    }());
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function lerpRgb(a, b, t) { return [lerp(a[0],b[0],t)|0, lerp(a[1],b[1],t)|0, lerp(a[2],b[2],t)|0]; }
+    function rgb(c) { return 'rgb('+c[0]+','+c[1]+','+c[2]+')'; }
+
+    function getSkyPalette(t) {
+      t = ((t % 1) + 1) % 1;
+      var lo = SKY[SKY.length-1], hi = SKY[0];
+      for (var i = 0; i < SKY.length - 1; i++) {
+        if (t >= SKY[i][0] && t < SKY[i+1][0]) { lo = SKY[i]; hi = SKY[i+1]; break; }
+      }
+      var span = hi[0] - lo[0];
+      var f = span > 0 ? (t - lo[0]) / span : 0;
+      return { top: lerpRgb(lo[1], hi[1], f), bot: lerpRgb(lo[2], hi[2], f) };
+    }
+
+    function drawSky(t) {
+      var p = getSkyPalette(t);
+      var g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, rgb(p.top));
+      g.addColorStop(1, rgb(p.bot));
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function drawStars(t) {
+      var alpha = 0;
+      if (t < 0.11)      alpha = 1 - t / 0.11;
+      else if (t > 0.89) alpha = (t - 0.89) / 0.11;
+      if (alpha <= 0.01) return;
+      ctx.save();
+      for (var i = 0; i < STARS.length; i++) {
+        var s = STARS[i];
+        ctx.beginPath();
+        ctx.arc(s[0]*W, s[1]*H, s[2], 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,'+(s[3]*alpha)+')';
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    var SUN_RISE = 0.14;
+    var SUN_SET  = 0.83;
+
+    function drawSun(t) {
+      if (t < SUN_RISE || t > SUN_SET) return;
+      var sunT = (t - SUN_RISE) / (SUN_SET - SUN_RISE); // 0..1 during day
+
+      // Position: sweeps across, parabolic height
+      var x = W * 0.07 + W * 0.86 * sunT;
+      var arcH = H * 0.70;
+      var y = H * 0.82 - arcH * Math.sin(sunT * Math.PI);
+
+      // Size: slightly larger near horizon (atmosphere effect)
+      var baseR = Math.min(W, H) * 0.030;
+      var r = baseR * (1.18 - 0.18 * Math.sin(sunT * Math.PI));
+
+      // Fade at horizons
+      var edge = sunT < 0.06 ? sunT/0.06 : sunT > 0.94 ? (1-sunT)/0.06 : 1;
+
+      // Color: orange at horizon, white-yellow at noon
+      var noon = Math.sin(sunT * Math.PI);
+      var discTop    = 'rgba('+lerp(255,255,noon*1|0)+','+lerp(180,245,noon*1|0)+','+lerp(80,230,noon*1|0)+',1)';
+      var discBottom = 'rgba(255,'+lerp(140,220,noon*1|0)+','+lerp(30,100,noon*1|0)+',1)';
+
+      ctx.save();
+      ctx.globalAlpha = edge;
+
+      // Outer atmospheric halo
+      var haloR = r * 7;
+      var haloA = 0.10 + 0.14 * noon;
+      var h1 = ctx.createRadialGradient(x, y, r*0.5, x, y, haloR);
+      h1.addColorStop(0, 'rgba(255,'+(180+noon*60|0)+',60,'+haloA+')');
+      h1.addColorStop(0.5, 'rgba(255,'+(140+noon*40|0)+',20,'+(haloA*0.3)+')');
+      h1.addColorStop(1, 'rgba(255,120,0,0)');
+      ctx.beginPath();
+      ctx.arc(x, y, haloR, 0, Math.PI*2);
+      ctx.fillStyle = h1;
+      ctx.fill();
+
+      // Inner corona
+      var c1 = ctx.createRadialGradient(x, y, 0, x, y, r*2.8);
+      c1.addColorStop(0, 'rgba(255,245,180,0.85)');
+      c1.addColorStop(0.6, 'rgba(255,210,80,0.35)');
+      c1.addColorStop(1, 'rgba(255,165,0,0)');
+      ctx.beginPath();
+      ctx.arc(x, y, r*2.8, 0, Math.PI*2);
+      ctx.fillStyle = c1;
+      ctx.fill();
+
+      // Sun disc
+      var disc = ctx.createRadialGradient(x-r*0.25, y-r*0.25, 0, x, y, r);
+      disc.addColorStop(0, '#FFFEF0');
+      disc.addColorStop(0.55, discTop);
+      disc.addColorStop(1, discBottom);
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI*2);
+      ctx.fillStyle = disc;
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawPowerCurve(t) {
+      // Power bell curve sits just above the horizon line
+      var baseY = H * 0.80;  // bottom of curve (at horizon)
+      var peakH = H * 0.11;  // max rise above base
+      var x0 = W * 0.06;
+      var x1 = W * 0.94;
+
+      // Gaussian: peak at solar noon (t=0.5), sigma ~0.145
+      var SIGMA = 0.145;
+      var MU    = 0.50;
+      function gauss(tVal) {
+        return Math.exp(-Math.pow(tVal - MU, 2) / (2 * SIGMA * SIGMA));
+      }
+
+      // Fade when no sun
+      var sunUp = t >= SUN_RISE && t <= SUN_SET;
+      var alpha = sunUp ? 0.85 : 0.20;
+
+      var pts = 180;
+      var curve = [];
+      for (var i = 0; i <= pts; i++) {
+        var xf = i / pts;
+        var tForX = SUN_RISE + (SUN_SET - SUN_RISE) * xf;
+        curve.push([x0 + (x1-x0)*xf, baseY - peakH * gauss(tForX)]);
+      }
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      // Fill
+      ctx.beginPath();
+      ctx.moveTo(x0, baseY);
+      for (var j = 0; j < curve.length; j++) ctx.lineTo(curve[j][0], curve[j][1]);
+      ctx.lineTo(x1, baseY);
+      ctx.closePath();
+      var fill = ctx.createLinearGradient(0, baseY - peakH, 0, baseY);
+      fill.addColorStop(0, 'rgba(245,225,74,0.24)');
+      fill.addColorStop(1, 'rgba(245,225,74,0.02)');
+      ctx.fillStyle = fill;
+      ctx.fill();
+
+      // Stroke
+      ctx.beginPath();
+      ctx.moveTo(curve[0][0], curve[0][1]);
+      for (var k = 1; k < curve.length; k++) ctx.lineTo(curve[k][0], curve[k][1]);
+      ctx.strokeStyle = 'rgba(245,225,74,0.50)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Current-time marker dot (only when sun is up)
+      if (sunUp) {
+        var dayFrac = Math.max(0, Math.min(1, (t - SUN_RISE) / (SUN_SET - SUN_RISE)));
+        var mx = x0 + (x1-x0) * dayFrac;
+        var my = baseY - peakH * gauss(t);
+
+        // Dashed vertical line
+        ctx.beginPath();
+        ctx.moveTo(mx, baseY);
+        ctx.lineTo(mx, my);
+        ctx.setLineDash([2, 4]);
+        ctx.strokeStyle = 'rgba(245,225,74,0.28)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Dot
+        ctx.beginPath();
+        ctx.arc(mx, my, 4.5, 0, Math.PI*2);
+        ctx.fillStyle = '#F5E14A';
+        ctx.fill();
+
+        // Dot glow
+        var dg = ctx.createRadialGradient(mx, my, 0, mx, my, 14);
+        dg.addColorStop(0, 'rgba(245,225,74,0.32)');
+        dg.addColorStop(1, 'rgba(245,225,74,0)');
+        ctx.beginPath();
+        ctx.arc(mx, my, 14, 0, Math.PI*2);
+        ctx.fillStyle = dg;
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    function drawGround(t) {
+      // Dark ground band below horizon
+      var hy = H * 0.82;
+      var isDawnDusk = (t > 0.14 && t < 0.30) || (t > 0.70 && t < 0.84);
+      var g = ctx.createLinearGradient(0, hy, 0, H);
+      if (isDawnDusk) {
+        g.addColorStop(0, 'rgba(28, 10, 4, 0.90)');
+        g.addColorStop(1, 'rgba(14,  5, 2, 0.98)');
+      } else if (t >= 0.30 && t <= 0.70) {
+        g.addColorStop(0, 'rgba(4, 12, 8, 0.88)');
+        g.addColorStop(1, 'rgba(6, 16, 10,0.96)');
+      } else {
+        g.addColorStop(0, 'rgba(4,  3, 14, 0.94)');
+        g.addColorStop(1, 'rgba(8,  5, 20, 0.99)');
+      }
+      ctx.fillStyle = g;
+      ctx.fillRect(0, hy, W, H - hy);
+
+      // Thin horizon glow
+      var hg = ctx.createLinearGradient(0, hy-3, 0, hy+3);
+      hg.addColorStop(0, 'rgba(255,255,255,0)');
+      hg.addColorStop(0.5, isDawnDusk ? 'rgba(255,170,70,0.14)' : 'rgba(255,255,255,0.04)');
+      hg.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = hg;
+      ctx.fillRect(0, hy-3, W, 6);
+    }
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function frame(ts) {
+      if (!lastTs) lastTs = ts;
+      var dt = Math.min((ts - lastTs) / 1000, 0.05); // cap at 50ms to avoid jumps
+      lastTs = ts;
+      cycle = (cycle + dt / CYCLE_SECS) % 1;
+
+      drawSky(cycle);
+      drawStars(cycle);
+      drawSun(cycle);
+      drawPowerCurve(cycle);
+      drawGround(cycle);
+
+      requestAnimationFrame(frame);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    requestAnimationFrame(frame);
+
+  }());
+  </script>
+</body>
+</html>

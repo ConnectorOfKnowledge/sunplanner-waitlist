@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sunplanner-waitlist",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3333", "."],
+      "port": 3333
+    }
+  ]
+}
