@@ -13,3 +13,6 @@ Key points:
 4. Confirm the DNS provider before any DNS change. Do not assume.
 5. Use a strong design skill. No beige, no space/particle cliché, no generic dark dashboard.
 6. Email signups must be stored somewhere Lonnie can export (to add testers to the Play closed test).
+
+## Comms (added by Lenny)
+Report all questions, status, and results to Lenny inbox (C:\Workspace\_agents\lenny\inbox\) as a loose .md, not just in this window. Only device-access or credential/login asks go to Lonnie directly, and note those in Lenny inbox too.

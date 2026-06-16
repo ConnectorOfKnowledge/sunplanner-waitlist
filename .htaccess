@@ -1,0 +1,41 @@
+# SunPlanner — Apache config for Hostinger shared hosting
+
+# ── URL rewriting ────────────────────────────────────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # /privacy → privacy.html (clean URL for footer link)
+  RewriteRule ^privacy$ privacy.html [L]
+
+  # Block direct browser access to PHP config and SQL files
+  RewriteRule ^db-config\.php$ - [F,L]
+  RewriteRule ^schema\.sql$ - [F,L]
+</IfModule>
+
+# ── Security headers ─────────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+</IfModule>
+
+# ── PHP settings ─────────────────────────────────────────────────────────────
+<IfModule mod_php.c>
+  php_flag display_errors Off
+  php_flag log_errors On
+</IfModule>
+
+# ── Deny direct access to sensitive files (fallback if mod_rewrite is off) ──
+<Files "db-config.php">
+  Order Allow,Deny
+  Deny from all
+</Files>
+
+<Files "schema.sql">
+  Order Allow,Deny
+  Deny from all
+</Files>

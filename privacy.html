@@ -81,16 +81,22 @@
       line-height: 1.75;
       margin-bottom: 14px;
     }
-    ul {
-      padding-left: 20px;
-      margin-bottom: 14px;
-    }
+    ul { padding-left: 20px; margin-bottom: 14px; }
     li { margin-bottom: 6px; }
-    a {
-      color: var(--solar);
-      text-decoration: none;
-    }
+    a { color: var(--solar); text-decoration: none; }
     a:hover { text-decoration: underline; }
+    .location-notice {
+      background: rgba(245, 225, 74, 0.06);
+      border: 1px solid rgba(245, 225, 74, 0.15);
+      border-radius: 4px;
+      padding: 18px 22px;
+      margin-bottom: 40px;
+    }
+    .location-notice p {
+      margin: 0;
+      color: rgba(255,255,255,0.70);
+      font-size: 0.93rem;
+    }
     .contact-block {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.07);
@@ -112,45 +118,49 @@
     <h1>Privacy Policy</h1>
     <p class="updated">Last updated: June 2026</p>
 
-    <p>SunPlanner ("we," "us," or "our") is a solar forecasting application built for off-grid nomads. This policy explains what information we collect, how we use it, and your rights regarding it. We collect only what we need and do not sell your data.</p>
+    <div class="location-notice">
+      <p>Your GPS location stays on your device. SunPlanner uses it to compute forecasts locally and never sends your exact coordinates to our servers or stores them.</p>
+    </div>
 
-    <h2>1. Information We Collect</h2>
-    <p>We collect the following categories of information:</p>
+    <p>SunPlanner ("we," "us," or "our") is a solar forecasting application for off-grid solar users. This policy explains what information we collect, how we use it, and your rights. We collect only what we need and do not sell your data.</p>
+
+    <h2>1. Information we collect</h2>
+    <p>We collect the following:</p>
     <ul>
-      <li><strong>Location data.</strong> The app accesses your device's GPS location to generate solar forecasts. This is the core function of the app — forecasts are computed for your specific coordinates. Location is processed on-device and on our weather data servers; it is not stored permanently or associated with an account.</li>
-      <li><strong>Saved locations.</strong> Locations you manually save within the app are stored locally on your device. They are not synced to our servers.</li>
-      <li><strong>Email address (waitlist only).</strong> If you join our waitlist at sunplanner.subtl.agency, we collect your email address to notify you when testing opens. Email addresses are stored securely and used only for SunPlanner communications.</li>
-      <li><strong>Device and usage data.</strong> We may collect anonymized crash reports and usage statistics to improve app stability. This data does not include personally identifiable information.</li>
+      <li><strong>Location data.</strong> The app accesses your device GPS to compute solar forecasts and sun-position calculations for your spot. Forecasts are computed for your coordinates. Your exact location is not stored on our servers or shared with third parties beyond what is needed to fetch weather data (see section 3).</li>
+      <li><strong>Saved locations.</strong> Locations you save within the app are stored locally on your device. They are not synced to our servers.</li>
+      <li><strong>Email address (waitlist only).</strong> If you join our waitlist at sunplanner.subtl.agency, we collect your email address to notify you when testing opens. It is stored securely and used only for SunPlanner communications.</li>
+      <li><strong>Anonymized usage data.</strong> We may collect anonymized crash reports and usage statistics to improve stability. This data does not include personally identifiable information.</li>
     </ul>
 
-    <h2>2. How We Use Your Information</h2>
+    <h2>2. How we use your information</h2>
     <ul>
-      <li>Location data is used exclusively to compute solar forecasts and sun position calculations for your current or saved spots.</li>
-      <li>Email addresses are used to send tester invitations, launch announcements, and important updates about SunPlanner. You can unsubscribe at any time.</li>
+      <li>Location data is used to compute solar production forecasts and sun position for your current or saved spots.</li>
+      <li>Email addresses are used to send tester invitations, launch announcements, and updates about SunPlanner. You can unsubscribe at any time.</li>
       <li>Anonymized usage data is used to fix bugs and improve the app.</li>
     </ul>
 
-    <h2>3. Data Sharing</h2>
+    <h2>3. Data sharing</h2>
     <p>We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
     <p>We use the following third-party services to operate the app:</p>
     <ul>
       <li><strong>Open-Meteo</strong> — weather and cloud cover data. Your general location is sent to their API to retrieve forecasts. See their privacy policy at open-meteo.com.</li>
-      <li><strong>Cloudflare</strong> — hosting and infrastructure for our website and API. See cloudflare.com/privacypolicy.</li>
+      <li><strong>Hostinger</strong> — hosting and infrastructure for our website. See hostinger.com/privacy-policy.</li>
     </ul>
     <p>We may disclose information if required by law or to protect the safety of our users.</p>
 
-    <h2>4. Data Retention</h2>
-    <p>Waitlist email addresses are retained until you request removal or until 12 months after the app launches publicly, whichever comes first. Anonymized usage data may be retained indefinitely in aggregate form.</p>
+    <h2>4. Data retention</h2>
+    <p>Waitlist email addresses are kept until you request removal or until 12 months after the app launches publicly, whichever comes first. Anonymized usage data may be retained indefinitely in aggregate form.</p>
 
-    <h2>5. Your Rights</h2>
-    <p>You may request that we delete your email address from our waitlist at any time. Contact us at the address below and we will remove it within 7 days.</p>
+    <h2>5. Your rights</h2>
+    <p>You may ask us to delete your email address from our waitlist at any time. Contact us at the address below and we will remove it within 7 days.</p>
     <p>If you are in the European Economic Area, you have additional rights under GDPR, including the right to access, correct, or port your personal data. Contact us to exercise these rights.</p>
 
     <h2>6. Children</h2>
     <p>SunPlanner is not directed at children under 13. We do not knowingly collect information from children under 13. If you believe a child has provided us with personal information, contact us and we will delete it.</p>
 
-    <h2>7. Changes to This Policy</h2>
-    <p>We may update this policy as the app evolves. Material changes will be noted on this page with an updated date. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+    <h2>7. Changes to this policy</h2>
+    <p>We may update this policy as the app evolves. Material changes will be noted on this page with an updated date. Continued use of the app after changes means you accept the updated policy.</p>
 
     <h2>8. Contact</h2>
     <p>Questions about this policy or requests to delete your data:</p>

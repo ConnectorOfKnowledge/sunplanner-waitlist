@@ -1,11 +1,15 @@
--- SunPlanner waitlist signups table
--- Run once after creating the D1 database:
---   wrangler d1 execute sunplanner-waitlist --file=./schema.sql --remote
+-- SunPlanner waitlist signups table (MySQL)
+-- Run this once in Hostinger phpMyAdmin after creating the database:
+--   hPanel > Databases > phpMyAdmin > select your database > SQL tab > paste and run
 
 CREATE TABLE IF NOT EXISTS signups (
-  id         INTEGER PRIMARY KEY AUTOINCREMENT,
-  email      TEXT    NOT NULL UNIQUE,
-  created_at TEXT    NOT NULL DEFAULT (datetime('now'))
-);
+  id         INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  email      VARCHAR(254)  NOT NULL,
+  created_at DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE INDEX IF NOT EXISTS idx_signups_created_at ON signups (created_at DESC);
+-- To export all signups as CSV from phpMyAdmin:
+--   Run:  SELECT email, created_at FROM signups ORDER BY created_at DESC;
+--   Then: Export tab > Format: CSV > Go
