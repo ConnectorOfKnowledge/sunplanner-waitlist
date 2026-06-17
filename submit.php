@@ -1,11 +1,11 @@
 <?php
 /**
  * SunPlanner waitlist signup endpoint.
- * Accepts POST with JSON body { "email": "..." }
+ * Accepts POST with JSON body { "email": "...", "platform": "android"|"iphone" }
  * Writes to MySQL via PDO. Credentials come from db-config.php.
  *
  * To export the full signup list, run this query in phpMyAdmin:
- *   SELECT email, created_at FROM signups ORDER BY created_at DESC;
+ *   SELECT email, platform, created_at FROM signups ORDER BY created_at DESC;
  * Then use phpMyAdmin's Export tab to download as CSV.
  */
 
@@ -49,6 +49,12 @@ if (strlen($email) > 254) {
     exit;
 }
 
+// Validate platform (default to android if missing or unrecognised)
+$platform = isset($data['platform']) ? strtolower(trim((string) $data['platform'])) : 'android';
+if (!in_array($platform, ['android', 'iphone'], true)) {
+    $platform = 'android';
+}
+
 // Load database credentials
 require_once __DIR__ . '/db-config.php';
 
@@ -64,11 +70,11 @@ try {
         ]
     );
 
-    // INSERT IGNORE silently skips duplicate emails
+    // INSERT IGNORE silently skips duplicate (email, platform) pairs
     $stmt = $pdo->prepare(
-        "INSERT IGNORE INTO signups (email, created_at) VALUES (:email, NOW())"
+        "INSERT IGNORE INTO signups (email, platform, created_at) VALUES (:email, :platform, NOW())"
     );
-    $stmt->execute([':email' => $email]);
+    $stmt->execute([':email' => $email, ':platform' => $platform]);
 
     echo json_encode(['success' => true]);
 
