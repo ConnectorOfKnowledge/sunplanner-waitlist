@@ -40,7 +40,7 @@
       overflow-x: hidden;
     }
 
-    /* HERO */
+    /* HERO -- headline + animation only, no form */
     #hero {
       position: relative;
       width: 100%;
@@ -49,7 +49,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 0;
+      padding: 80px 0 60px;
     }
 
     #sky-canvas {
@@ -103,7 +103,7 @@
       display: flex;
       gap: 1px;
       max-width: 580px;
-      margin: 0 auto 22px;
+      margin: 0 auto;
       background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: var(--radius);
@@ -145,6 +145,19 @@
       line-height: 1.45;
     }
 
+    /* CTA SECTION -- dark zone below hero sky */
+    #cta-section {
+      background: var(--night);
+      padding: 56px 0 72px;
+    }
+
+    #cta-section .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
     /* Free year callout */
     .free-year-hook {
       display: inline-block;
@@ -156,7 +169,6 @@
       border: 1px solid rgba(245, 225, 74, 0.22);
       border-radius: 2px;
       padding: 6px 13px;
-      margin-bottom: 14px;
     }
 
     /* CTA zone */
@@ -165,6 +177,7 @@
       flex-direction: column;
       align-items: center;
       gap: 11px;
+      width: 100%;
     }
 
     /* Waitlist form */
@@ -241,7 +254,7 @@
       max-width: 420px;
       width: 100%;
       background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: var(--radius);
       overflow: hidden;
     }
@@ -263,9 +276,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 11px 18px;
-      background: rgba(8, 7, 20, 0.82);
-      transition: background 0.12s, color 0.12s;
+      padding: 12px 18px;
+      background: rgba(8, 7, 20, 0.88);
+      transition: background 0.15s;
       gap: 3px;
       user-select: none;
     }
@@ -273,8 +286,8 @@
     .platform-label strong {
       font-size: 12px;
       font-weight: 600;
-      color: rgba(255,255,255,0.42);
-      transition: color 0.12s;
+      color: rgba(255,255,255,0.32);
+      transition: color 0.15s;
       letter-spacing: 0.01em;
     }
 
@@ -282,21 +295,22 @@
       font-family: var(--font-mono);
       font-size: 8px;
       letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.18);
       text-transform: uppercase;
-      transition: color 0.12s;
+      transition: color 0.15s;
     }
 
+    /* Selected: solid solar yellow, dark text -- unmistakable */
     .platform-opt input[type="radio"]:checked + .platform-label {
-      background: rgba(245, 225, 74, 0.10);
+      background: var(--solar);
     }
 
     .platform-opt input[type="radio"]:checked + .platform-label strong {
-      color: var(--solar);
+      color: var(--night);
     }
 
     .platform-opt input[type="radio"]:checked + .platform-label small {
-      color: rgba(245, 225, 74, 0.55);
+      color: rgba(8, 7, 20, 0.55);
     }
 
     .platform-opt input[type="radio"]:focus-visible + .platform-label {
@@ -542,7 +556,7 @@
       letter-spacing: 0.04em;
     }
 
-    /* SUCCESS MODAL */
+    /* MODALS */
     .modal {
       position: fixed;
       inset: 0;
@@ -606,6 +620,47 @@
 
     .modal-box button:hover { background: #ffe840; }
 
+    /* Confirmation modal action row */
+    .confirm-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 26px;
+    }
+
+    .btn-confirm {
+      background: var(--solar);
+      color: var(--night);
+      border: none;
+      padding: 11px 26px;
+      border-radius: var(--radius);
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-confirm:hover { background: #ffe840; }
+
+    .btn-back {
+      background: transparent;
+      color: rgba(255,255,255,0.50);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 11px 26px;
+      border-radius: var(--radius);
+      font-family: var(--font-head);
+      font-weight: 500;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s;
+    }
+
+    .btn-back:hover {
+      color: rgba(255,255,255,0.82);
+      border-color: rgba(255,255,255,0.36);
+    }
+
     /* RESPONSIVE */
     @media (max-width: 520px) {
       .hero-values { flex-direction: column; max-width: 340px; }
@@ -626,7 +681,7 @@
   <!-- MODE CONFIG: change "waitlist" to "live" when the app launches -->
   <script>const SITE_MODE = "waitlist";</script>
 
-  <!-- HERO -->
+  <!-- HERO: sky animation + headline only -->
   <section id="hero" role="banner">
     <canvas id="sky-canvas" aria-hidden="true"></canvas>
 
@@ -652,7 +707,12 @@
           <span class="hero-value-note">Right even next to metal and battery banks.</span>
         </div>
       </div>
+    </div>
+  </section>
 
+  <!-- CTA SECTION: dark zone, clearly below the hero sky -->
+  <section id="cta-section">
+    <div class="container">
       <p class="free-year-hook">Early testers get a full year free.</p>
       <div id="cta-zone"></div>
     </div>
@@ -663,7 +723,7 @@
     <div class="container">
       <div class="section-label">Calibration</div>
       <h2>Why the numbers are actually right</h2>
-      <p class="why-body">Generic solar apps start from a clean-sky average and call it a forecast. SunPlanner starts from your actual setup. You enter what your system produces, and the forecast adjusts to match your rig. On the compass side, metal and battery banks shift the magnetometer reading by 10 to 30 degrees. SunPlanner calibrates that too, so sun-finding stays accurate in the places you actually use it.</p>
+      <p class="why-body">Other solar apps estimate from your panel specs and stop there. SunPlanner keeps going: it tunes the forecast to what your system actually produces, so the numbers match your rig. No other app calibrates to your real output. On the compass side, metal and battery banks shift the magnetometer reading by 10 to 30 degrees. SunPlanner calibrates that too, so sun-finding stays accurate in the places you actually use it.</p>
       <div class="phone-frame-wrap">
         <div class="phone-frame">
           <div class="phone-notch" aria-hidden="true"></div>
@@ -715,7 +775,7 @@
       <nav class="footer-nav" aria-label="Footer">
         <a href="privacy.html">Privacy Policy</a>
       </nav>
-      <p class="footer-privacy-note">We use your location to generate your forecast. We don't store, sell, or share it.</p>
+      <p class="footer-privacy-note">Your location is used only to generate your forecast. We don't sell it or use it for ads.</p>
       <p class="footer-copy">&copy; 2026 SunPlanner, built by Subtl.agency</p>
     </div>
   </footer>
@@ -730,13 +790,26 @@
     </div>
   </div>
 
+  <!-- CONFIRMATION MODAL: shown before submit to catch wrong-platform signups -->
+  <div id="confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-heading">
+    <div class="modal-box">
+      <h3 id="confirm-heading">Just to confirm</h3>
+      <p id="confirm-body">Please confirm you're using an Android.</p>
+      <div class="confirm-actions">
+        <button id="confirm-yes" class="btn-confirm">Confirm</button>
+        <button id="confirm-back" class="btn-back">Go back</button>
+      </div>
+    </div>
+  </div>
+
   <script>
   (function () {
     'use strict';
 
-    // MODE SWITCH: set SITE_MODE = "live" above to show the Google Play button
     var ctaZone = document.getElementById('cta-zone');
+    var pendingSubmit = null;
 
+    // MODE SWITCH: set SITE_MODE = "live" above to show the Google Play button
     if (typeof SITE_MODE !== 'undefined' && SITE_MODE === 'live') {
       ctaZone.innerHTML = '<a href="https://play.google.com/store/apps/details?id=com.sunplanner.app" class="play-btn" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l232.4-232.4L47 0zm389.2 210.1L418.5 198 325.3 256l93.2 57.9 18.7-12.1c16.1-9.3 26.8-26.5 26.8-45.8s-10.7-36.5-26.8-45.9zm-113.5 75.7L47 477c3.7 1.9 7.6 2.9 11.5 2.9 5.9 0 11.7-1.9 17.1-5.5l280.4-161.2-53-28.4z"/></svg>Download on Google Play</a>';
     } else {
@@ -781,51 +854,60 @@
         var platformEl = document.querySelector('.platform-toggle input[type="radio"]:checked');
         var platform = platformEl ? platformEl.value : 'android';
 
-        btn.textContent = 'Sending...';
-        btn.disabled = true;
+        // Show confirmation before touching the backend
+        document.getElementById('confirm-body').textContent = platform === 'iphone'
+          ? "Please confirm you're using an iPhone."
+          : "Please confirm you're using an Android.";
+        document.getElementById('confirm-modal').classList.remove('hidden');
+        document.getElementById('confirm-yes').focus();
 
-        fetch('/submit.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, platform: platform }),
-        })
-          .then(function (res) {
-            if (!res.ok) return res.json().then(function (d) { throw new Error(d.error || 'Submission failed.'); });
-            return res.json();
-          })
-          .then(function () {
-            emailInput.value = '';
-            var sel = document.querySelector('.platform-toggle input[type="radio"]:checked');
-            var plat = sel ? sel.value : 'android';
-            document.getElementById('modal-body').textContent = plat === 'iphone'
-              ? "We'll reach out when the iPhone build is ready for testing. Early testers get the full app free for a year."
-              : "We'll reach out when the Android beta opens. Early testers get the full app free for a year.";
-            openModal();
-          })
-          .catch(function (err) {
-            showError('Something went wrong. Try again.');
-            console.error(err);
-          })
-          .finally(function () {
-            btn.textContent = 'Join waitlist';
-            btn.disabled = false;
-          });
+        pendingSubmit = { email: email, platform: platform, btn: btn, emailInput: emailInput };
       });
+    }
 
-      function showError(msg) {
-        var el = document.querySelector('.form-error');
-        if (!el) {
-          el = document.createElement('p');
-          el.className = 'form-error';
-          ctaZone.appendChild(el);
-        }
-        el.textContent = msg;
-      }
+    function doSubmit(email, platform, btn, emailInput) {
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
 
-      function clearError() {
-        var el = document.querySelector('.form-error');
-        if (el) el.remove();
+      fetch('/submit.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, platform: platform }),
+      })
+        .then(function (res) {
+          if (!res.ok) return res.json().then(function (d) { throw new Error(d.error || 'Submission failed.'); });
+          return res.json();
+        })
+        .then(function () {
+          emailInput.value = '';
+          document.getElementById('modal-body').textContent = platform === 'iphone'
+            ? "We'll reach out when the iPhone build is ready for testing. Early testers get the full app free for a year."
+            : "We'll reach out when the Android beta opens. Early testers get the full app free for a year.";
+          openModal();
+        })
+        .catch(function (err) {
+          showError('Something went wrong. Try again.');
+          console.error(err);
+        })
+        .finally(function () {
+          btn.textContent = 'Join waitlist';
+          btn.disabled = false;
+        });
+    }
+
+    function showError(msg) {
+      var el = document.querySelector('.form-error');
+      if (!el) {
+        el = document.createElement('p');
+        el.className = 'form-error';
+        ctaZone.appendChild(el);
       }
+      el.textContent = msg;
+    }
+
+    function clearError() {
+      var el = document.querySelector('.form-error');
+      if (el) el.remove();
     }
 
     function openModal() {
@@ -834,6 +916,28 @@
       document.getElementById('modal-close').focus();
     }
 
+    // Confirmation modal handlers
+    document.getElementById('confirm-yes').addEventListener('click', function () {
+      document.getElementById('confirm-modal').classList.add('hidden');
+      if (!pendingSubmit) return;
+      var p = pendingSubmit;
+      pendingSubmit = null;
+      doSubmit(p.email, p.platform, p.btn, p.emailInput);
+    });
+
+    document.getElementById('confirm-back').addEventListener('click', function () {
+      document.getElementById('confirm-modal').classList.add('hidden');
+      pendingSubmit = null;
+    });
+
+    document.getElementById('confirm-modal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        this.classList.add('hidden');
+        pendingSubmit = null;
+      }
+    });
+
+    // Success modal handlers
     document.getElementById('modal-close').addEventListener('click', function () {
       document.getElementById('success-modal').classList.add('hidden');
     });
@@ -843,7 +947,11 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') document.getElementById('success-modal').classList.add('hidden');
+      if (e.key === 'Escape') {
+        document.getElementById('success-modal').classList.add('hidden');
+        document.getElementById('confirm-modal').classList.add('hidden');
+        pendingSubmit = null;
+      }
     });
 
     // SKY CANVAS: "watch a day of solar power happen"
