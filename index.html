@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SunPlanner — Solar Production Forecast, Calibrated to Your Panels</title>
+  <title>SunPlanner: Solar Production Forecast, Calibrated to Your Panels</title>
   <meta name="description" content="A 16-day solar production forecast calibrated to your actual panels and location. For cabins, RVs, boats, and off-grid homes.">
-  <meta property="og:title" content="SunPlanner — Solar Production Forecast, Calibrated to Your Panels">
+  <meta property="og:title" content="SunPlanner: Solar Production Forecast, Calibrated to Your Panels">
   <meta property="og:description" content="A 16-day solar production forecast calibrated to your actual panels and location.">
   <meta name="theme-color" content="#080714">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
       overflow-x: hidden;
     }
 
-    /* ─── HERO ──────────────────────────────────────── */
+    /* HERO */
     #hero {
       position: relative;
       width: 100%;
@@ -98,26 +98,65 @@
       text-shadow: 0 1px 16px rgba(0,0,0,0.6);
     }
 
-    /* Above-the-fold pills */
-    .hero-pills {
+    /* Value panels */
+    .hero-values {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 32px;
+      gap: 1px;
+      max-width: 580px;
+      margin: 0 auto 22px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      text-align: left;
     }
 
-    .hero-pill {
+    .hero-value {
+      flex: 1;
+      padding: 14px 16px;
+      background: rgba(8, 7, 20, 0.78);
+      border-left: 2px solid rgba(245,225,74,0.50);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-value-label {
       font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      color: rgba(255,255,255,0.52);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 2px;
-      padding: 5px 11px;
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      color: var(--solar);
       text-transform: uppercase;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .hero-value-claim {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.25;
+    }
+
+    .hero-value-note {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      color: rgba(255,255,255,0.42);
+      line-height: 1.45;
+    }
+
+    /* Free year callout */
+    .free-year-hook {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      color: var(--solar);
+      background: rgba(245, 225, 74, 0.07);
+      border: 1px solid rgba(245, 225, 74, 0.22);
+      border-radius: 2px;
+      padding: 6px 13px;
+      margin-bottom: 14px;
     }
 
     /* CTA zone */
@@ -219,37 +258,7 @@
 
     .play-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
 
-    /* Scroll cue */
-    .scroll-cue {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      opacity: 0.38;
-      animation: cue-bob 2.4s ease-in-out infinite;
-    }
-
-    .scroll-cue span {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      color: #fff;
-      text-transform: uppercase;
-    }
-
-    .scroll-cue svg { width: 16px; height: 16px; color: #fff; }
-
-    @keyframes cue-bob {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50%       { transform: translateX(-50%) translateY(5px); }
-    }
-
-    /* ─── SHARED ────────────────────────────────────── */
+    /* SHARED */
     .container {
       max-width: 880px;
       margin: 0 auto;
@@ -266,7 +275,7 @@
       margin-bottom: 16px;
     }
 
-    /* ─── CALIBRATION EXPLAINER ─────────────────────── */
+    /* CALIBRATION EXPLAINER */
     #why {
       background: var(--deep);
       padding: 96px 0;
@@ -288,65 +297,44 @@
       margin-bottom: 48px;
     }
 
-    /* Output example display */
-    .output-example {
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,0.025);
-      padding: 28px 32px;
-      max-width: 340px;
-    }
-
-    .output-example-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      color: rgba(255,255,255,0.28);
-      text-transform: uppercase;
-      margin-bottom: 18px;
-    }
-
-    .output-rows {
+    /* Phone frame */
+    .phone-frame-wrap {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 18px;
+      justify-content: center;
     }
 
-    .output-row {
-      display: flex;
-      align-items: baseline;
-      gap: 18px;
+    .phone-frame {
+      width: 220px;
+      background: #0D0B1E;
+      border: 2px solid rgba(255,255,255,0.10);
+      border-radius: 30px;
+      padding: 14px 8px;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.60),
+        0 0 0 1px rgba(255,255,255,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
-    .oday {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: rgba(255,255,255,0.32);
-      width: 28px;
-      flex-shrink: 0;
+    .phone-notch {
+      width: 56px;
+      height: 6px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 3px;
+      margin: 0 auto 10px;
     }
 
-    .oval {
-      font-family: var(--font-mono);
-      font-size: 20px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.72);
-      letter-spacing: -0.01em;
+    .phone-screen {
+      border-radius: 18px;
+      overflow: hidden;
     }
 
-    .oval.peak { color: var(--solar); }
-
-    .output-caption {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: rgba(255,255,255,0.26);
-      letter-spacing: 0.05em;
-      line-height: 1.55;
-      margin: 0;
+    .phone-screen img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
-    /* ─── FEATURES ──────────────────────────────────── */
+    /* FEATURES */
     #features {
       background: var(--night);
       padding: 96px 0;
@@ -397,7 +385,7 @@
       color: rgba(255,255,255,0.50);
     }
 
-    /* ─── TESTERS ───────────────────────────────────── */
+    /* TESTERS */
     #testers {
       background: var(--deep);
       padding: 96px 0;
@@ -435,7 +423,7 @@
       margin: 0 auto;
     }
 
-    /* ─── FOOTER ────────────────────────────────────── */
+    /* FOOTER */
     footer {
       background: var(--deep);
       border-top: 1px solid rgba(255,255,255,0.055);
@@ -471,7 +459,7 @@
     .footer-privacy-note {
       font-size: 12px;
       color: rgba(255,255,255,0.28);
-      max-width: 380px;
+      max-width: 420px;
       line-height: 1.55;
       font-family: var(--font-mono);
       letter-spacing: 0.03em;
@@ -484,7 +472,7 @@
       letter-spacing: 0.04em;
     }
 
-    /* ─── SUCCESS MODAL ─────────────────────────────── */
+    /* SUCCESS MODAL */
     .modal {
       position: fixed;
       inset: 0;
@@ -548,7 +536,11 @@
 
     .modal-box button:hover { background: #ffe840; }
 
-    /* ─── RESPONSIVE ────────────────────────────────── */
+    /* RESPONSIVE */
+    @media (max-width: 520px) {
+      .hero-values { flex-direction: column; max-width: 340px; }
+    }
+
     @media (max-width: 440px) {
       .waitlist-form { flex-direction: column; }
       .waitlist-form input[type="email"] {
@@ -556,72 +548,64 @@
         padding: 13px 14px;
       }
       .waitlist-form button[type="submit"] { padding: 13px 14px; width: 100%; }
-      .output-example { max-width: 100%; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .scroll-cue { animation: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ══ MODE CONFIG — change "waitlist" to "live" when the app launches ══ -->
+  <!-- MODE CONFIG: change "waitlist" to "live" when the app launches -->
   <script>const SITE_MODE = "waitlist";</script>
 
-  <!-- ══ HERO ════════════════════════════════════════ -->
+  <!-- HERO -->
   <section id="hero" role="banner">
     <canvas id="sky-canvas" aria-hidden="true"></canvas>
 
     <div class="hero-content">
       <p class="hero-eyebrow">Calibrated Solar Forecasting</p>
       <h1>A solar forecast<br>tuned to your actual panels.</h1>
-      <p class="hero-sub">SunPlanner calibrates its 16-day production forecast to what your system really makes, so the numbers match your rig instead of a generic estimate. It also keeps your sun-aiming accurate next to the metal and batteries that throw other apps off.</p>
-      <div class="hero-pills" aria-hidden="true">
-        <span class="hero-pill">Tuned to your panels</span>
-        <span class="hero-pill">16 days out</span>
-        <span class="hero-pill">Your spot, your numbers</span>
-      </div>
-      <div id="cta-zone"></div>
-    </div>
+      <p class="hero-sub">SunPlanner calibrates its 16-day production forecast to what your system actually makes, so the numbers reflect your rig, not a generic estimate. The compass is calibrated too, so sun-finding stays accurate even next to metal and battery banks.</p>
 
-    <div class="scroll-cue" aria-hidden="true">
-      <span>scroll</span>
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M8 3v10M4 9l4 4 4-4"/>
-      </svg>
+      <div class="hero-values" aria-label="Key features">
+        <div class="hero-value">
+          <span class="hero-value-label">Calibrated</span>
+          <span class="hero-value-claim">Numbers from your actual panels</span>
+          <span class="hero-value-note">Tuned to your output, not a regional estimate.</span>
+        </div>
+        <div class="hero-value">
+          <span class="hero-value-label">16 Days</span>
+          <span class="hero-value-claim">See what's coming</span>
+          <span class="hero-value-note">Sun and clouds, day by day, two weeks out.</span>
+        </div>
+        <div class="hero-value">
+          <span class="hero-value-label">Your Spot</span>
+          <span class="hero-value-claim">Accurate where you're set up</span>
+          <span class="hero-value-note">Right even next to metal and battery banks.</span>
+        </div>
+      </div>
+
+      <p class="free-year-hook">Early testers get a full year free.</p>
+      <div id="cta-zone"></div>
     </div>
   </section>
 
-  <!-- ══ CALIBRATION EXPLAINER ═══════════════════════ -->
+  <!-- CALIBRATION EXPLAINER -->
   <section id="why">
     <div class="container">
       <div class="section-label">Calibration</div>
       <h2>Why the numbers are actually right</h2>
       <p class="why-body">Generic solar apps start from a clean-sky average and call it a forecast. SunPlanner starts from your actual setup. You enter what your system produces, and the forecast adjusts to match your rig. On the compass side, metal and battery banks shift the magnetometer reading by 10 to 30 degrees. SunPlanner calibrates that too, so sun-finding stays accurate in the places you actually use it.</p>
-
-      <div class="output-example" role="img" aria-label="Sample daily output forecast: Wed 1.4 kWh, Thu 5.8 kWh, Fri 3.1 kWh">
-        <div class="output-example-label">Sample output</div>
-        <div class="output-rows">
-          <div class="output-row">
-            <span class="oday">Wed</span>
-            <span class="oval">1.4 kWh</span>
-          </div>
-          <div class="output-row">
-            <span class="oday">Thu</span>
-            <span class="oval peak">5.8 kWh</span>
-          </div>
-          <div class="output-row">
-            <span class="oday">Fri</span>
-            <span class="oval">3.1 kWh</span>
+      <div class="phone-frame-wrap">
+        <div class="phone-frame">
+          <div class="phone-notch" aria-hidden="true"></div>
+          <div class="phone-screen">
+            <img src="dashboard.png" alt="SunPlanner forecast dashboard: today 18.8 kWh on a clear sunny day, multi-day outlook showing consistent production" loading="lazy">
           </div>
         </div>
-        <p class="output-caption">Day-by-day, out to 16 days.<br>Tuned to your panels and your location.</p>
       </div>
     </div>
   </section>
 
-  <!-- ══ FEATURES ═════════════════════════════════════ -->
+  <!-- FEATURES -->
   <section id="features">
     <div class="container">
       <h2>What it does</h2>
@@ -629,7 +613,7 @@
         <div class="benefit">
           <div class="benefit-label">Forecast</div>
           <h3>Built around your setup</h3>
-          <p>Give it your panel specs and any location — your cabin, your mooring, your current spot or one you're considering — and you get a day-by-day production forecast. Not a regional average. Your numbers.</p>
+          <p>Give it your panel specs and a location, and you get a day-by-day production forecast. Your current spot, your cabin, your mooring, or anywhere you're considering. Not a regional average.</p>
         </div>
         <div class="benefit">
           <div class="benefit-label">Anywhere</div>
@@ -645,7 +629,7 @@
     </div>
   </section>
 
-  <!-- ══ TESTERS ═══════════════════════════════════════ -->
+  <!-- TESTERS -->
   <section id="testers">
     <div class="container">
       <div class="tester-badge">Early Tester Program</div>
@@ -654,19 +638,19 @@
     </div>
   </section>
 
-  <!-- ══ FOOTER ═══════════════════════════════════════ -->
+  <!-- FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-brand">SUNPLANNER</div>
       <nav class="footer-nav" aria-label="Footer">
-        <a href="/privacy">Privacy Policy</a>
+        <a href="privacy.html">Privacy Policy</a>
       </nav>
-      <p class="footer-privacy-note">Your location stays on your device. We never store or share your GPS coordinates.</p>
-      <p class="footer-copy">© 2026 SunPlanner</p>
+      <p class="footer-privacy-note">We use your location to generate your forecast. We don't store, sell, or share it.</p>
+      <p class="footer-copy">&copy; 2026 SunPlanner, built by Subtl.agency</p>
     </div>
   </footer>
 
-  <!-- ══ SUCCESS MODAL ════════════════════════════════ -->
+  <!-- SUCCESS MODAL -->
   <div id="success-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
     <div class="modal-box">
       <div class="modal-check" aria-hidden="true">&#10003;</div>
@@ -680,21 +664,16 @@
   (function () {
     'use strict';
 
-    // ════════════════════════════════════════════════════════
-    // MODE SWITCH
-    // ════════════════════════════════════════════════════════
+    // MODE SWITCH: set SITE_MODE = "live" above to show the Google Play button
     var ctaZone = document.getElementById('cta-zone');
 
     if (typeof SITE_MODE !== 'undefined' && SITE_MODE === 'live') {
       ctaZone.innerHTML = '<a href="https://play.google.com/store/apps/details?id=com.sunplanner.app" class="play-btn" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l232.4-232.4L47 0zm389.2 210.1L418.5 198 325.3 256l93.2 57.9 18.7-12.1c16.1-9.3 26.8-26.5 26.8-45.8s-10.7-36.5-26.8-45.9zm-113.5 75.7L47 477c3.7 1.9 7.6 2.9 11.5 2.9 5.9 0 11.7-1.9 17.1-5.5l280.4-161.2-53-28.4z"/></svg>Download on Google Play</a>';
     } else {
-      ctaZone.innerHTML = '<form class="waitlist-form" id="waitlist-form" novalidate><label for="email-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Email address</label><input type="email" id="email-input" name="email" placeholder="your@email.com" autocomplete="email" required><button type="submit">Join waitlist</button></form><p class="form-note">Free year for early testers &middot; No spam</p>';
+      ctaZone.innerHTML = '<form class="waitlist-form" id="waitlist-form" novalidate><label for="email-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Email address</label><input type="email" id="email-input" name="email" placeholder="your@email.com" autocomplete="email" required><button type="submit">Join waitlist</button></form><p class="form-note">No spam</p>';
       bindForm();
     }
 
-    // ════════════════════════════════════════════════════════
-    // FORM HANDLING
-    // ════════════════════════════════════════════════════════
     function bindForm() {
       var form = document.getElementById('waitlist-form');
       if (!form) return;
@@ -713,7 +692,7 @@
           return;
         }
 
-        btn.textContent = 'Sending…';
+        btn.textContent = 'Sending...';
         btn.disabled = true;
 
         fetch('/submit.php', {
@@ -773,9 +752,7 @@
       if (e.key === 'Escape') document.getElementById('success-modal').classList.add('hidden');
     });
 
-    // ════════════════════════════════════════════════════════
-    // SKY CANVAS — "watch a day of solar power happen"
-    // ════════════════════════════════════════════════════════
+    // SKY CANVAS: "watch a day of solar power happen"
     var canvas = document.getElementById('sky-canvas');
     var ctx = canvas.getContext('2d');
     var W, H;

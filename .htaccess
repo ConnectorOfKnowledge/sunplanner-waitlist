@@ -1,4 +1,4 @@
-# SunPlanner — Apache config for Hostinger shared hosting
+# SunPlanner: Apache config for Hostinger shared hosting
 
 # ── URL rewriting ────────────────────────────────────────────────────────────
 <IfModule mod_rewrite.c>
