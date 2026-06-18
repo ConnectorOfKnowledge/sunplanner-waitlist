@@ -713,7 +713,7 @@
   <!-- CTA SECTION: dark zone, clearly below the hero sky -->
   <section id="cta-section">
     <div class="container">
-      <p class="free-year-hook">Early testers get a full year free.</p>
+      <p class="free-year-hook">First 20 testers get a free year, the next 30 get 50% off.</p>
       <div id="cta-zone"></div>
     </div>
   </section>
@@ -763,8 +763,8 @@
   <section id="testers">
     <div class="container">
       <div class="tester-badge">Early Tester Program</div>
-      <h2>Help test it in real conditions.<br>Get a year free.</h2>
-      <p>SunPlanner is entering closed beta on Android first, with an iPhone build on the way. We want testers with real systems: panels, an inverter, actual production numbers to calibrate against. Pick your platform above, join the list, and get the full app free for a year when your build is ready. No credit card, no auto-billing.</p>
+      <h2>Help test it in real conditions.<br>First 20 testers get a free year.</h2>
+      <p>SunPlanner is entering closed beta on Android first, with an iPhone build on the way. We want testers with real systems: panels, an inverter, actual production numbers to calibrate against. Pick your platform above and join the list. The first 20 testers get the full app free for a year, and the next 30 get 50% off. No credit card, no auto-billing.</p>
     </div>
   </section>
 
@@ -785,7 +785,7 @@
     <div class="modal-box">
       <div class="modal-check" aria-hidden="true">&#10003;</div>
       <h3 id="modal-heading">You're on the list.</h3>
-      <p id="modal-body">We'll reach out when testing opens. Early testers get the full app free for a year.</p>
+      <p id="modal-body">We'll reach out when testing opens. The first 20 testers get a free year, the next 30 get 50% off.</p>
       <button id="modal-close">Got it</button>
     </div>
   </div>
@@ -881,8 +881,8 @@
         .then(function () {
           emailInput.value = '';
           document.getElementById('modal-body').textContent = platform === 'iphone'
-            ? "We'll reach out when the iPhone build is ready for testing. Early testers get the full app free for a year."
-            : "We'll reach out when the Android beta opens. Early testers get the full app free for a year.";
+            ? "We'll reach out when the iPhone build is ready for testing. The first 20 testers get a free year, the next 30 get 50% off."
+            : "We'll reach out when the Android beta opens. The first 20 testers get a free year, the next 30 get 50% off.";
           openModal();
         })
         .catch(function (err) {
