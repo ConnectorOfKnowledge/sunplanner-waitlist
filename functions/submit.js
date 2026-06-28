@@ -21,10 +21,13 @@ export async function onRequestPost(context) {
   const raw = typeof data.platform === 'string' ? data.platform.toLowerCase().trim() : '';
   const platform = ['android', 'iphone'].includes(raw) ? raw : 'android';
 
+  // Name is optional; sanitise to plain text
+  const name = typeof data.name === 'string' ? data.name.trim().slice(0, 80) : null;
+
   try {
     await env.DB.prepare(
-      'INSERT INTO signups (email, platform) VALUES (?, ?)'
-    ).bind(email, platform).run();
+      'INSERT INTO signups (email, platform, name) VALUES (?, ?, ?)'
+    ).bind(email, platform, name || null).run();
   } catch (err) {
     // Duplicate (email, platform) pair means already signed up -- treat as success
     if (err.message && err.message.includes('UNIQUE constraint failed')) {
