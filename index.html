@@ -684,6 +684,15 @@
       color: rgba(255,255,255,0.28);
     }
 
+    /* Honeypot: hidden from sighted and AT users, present for bots that blind-fill forms */
+    .hp-field {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 520px) {
       .hero-values { flex-direction: column; max-width: 340px; }
@@ -819,6 +828,7 @@
       <h3 id="confirm-heading">Almost there</h3>
       <p id="confirm-body">Signing up on Android.</p>
       <input type="text" id="confirm-name" class="confirm-name-input" placeholder="First name (optional)" autocomplete="given-name" maxlength="80">
+      <input type="text" id="confirm-website" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="confirm-actions">
         <button id="confirm-yes" class="btn-confirm">I'm in</button>
         <button id="confirm-back" class="btn-back">Go back</button>
@@ -891,14 +901,14 @@
       });
     }
 
-    function doSubmit(email, platform, name, btn, emailInput) {
+    function doSubmit(email, platform, name, website, btn, emailInput) {
       btn.textContent = 'Sending...';
       btn.disabled = true;
 
       fetch('/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, platform: platform, name: name || null }),
+        body: JSON.stringify({ email: email, platform: platform, name: name || null, website: website || '' }),
       })
         .then(function (res) {
           if (!res.ok) return res.json().then(function (d) { throw new Error(d.error || 'Submission failed.'); });
@@ -945,11 +955,12 @@
     // Confirmation modal handlers
     document.getElementById('confirm-yes').addEventListener('click', function () {
       var name = document.getElementById('confirm-name').value.trim();
+      var website = document.getElementById('confirm-website').value;
       document.getElementById('confirm-modal').classList.add('hidden');
       if (!pendingSubmit) return;
       var p = pendingSubmit;
       pendingSubmit = null;
-      doSubmit(p.email, p.platform, name, p.btn, p.emailInput);
+      doSubmit(p.email, p.platform, name, website, p.btn, p.emailInput);
     });
 
     document.getElementById('confirm-back').addEventListener('click', function () {
