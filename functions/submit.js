@@ -1,5 +1,37 @@
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_SECONDS = 600; // 10 minutes
+
+// KV-based limiter, not the Workers ratelimit binding: the binding's `period`
+// field only accepts 10 or 60 seconds (verified against Cloudflare docs
+// 2026-07-02), so it can't express a 10-minute window. Fixed-window counter,
+// not sliding -- read-then-write has a small race under concurrent bursts,
+// which is acceptable here (this stops a scripted loop and a real retry, not
+// a coordinated distributed attack that needs atomic precision).
+async function checkRateLimit(request, env) {
+  if (!env.RATE_LIMIT_KV) return true; // fail open if binding is missing
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ip));
+  const hashed = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+  const key = `rl:${hashed}`;
+
+  const current = await env.RATE_LIMIT_KV.get(key);
+  const count = current ? parseInt(current, 10) : 0;
+  if (count >= RATE_LIMIT_MAX) return false;
+
+  await env.RATE_LIMIT_KV.put(key, String(count + 1), { expirationTtl: RATE_LIMIT_WINDOW_SECONDS });
+  return true;
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
+
+  const withinLimit = await checkRateLimit(request, env);
+  if (!withinLimit) {
+    return Response.json(
+      { success: false, error: 'Too many requests. Please try again in a few minutes.' },
+      { status: 429 }
+    );
+  }
 
   let data;
   try {
