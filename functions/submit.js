@@ -8,6 +8,13 @@ export async function onRequestPost(context) {
     return Response.json({ success: false, error: 'Invalid JSON.' }, { status: 400 });
   }
 
+  // Honeypot: legitimate users never populate this hidden field, bots that
+  // blind-fill every input do. Respond as if successful so bots don't learn
+  // to skip the field, but never touch the database.
+  if (typeof data.website === 'string' && data.website.trim() !== '') {
+    return Response.json({ success: true });
+  }
+
   // Validate email
   const email = typeof data.email === 'string' ? data.email.trim().toLowerCase() : '';
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
@@ -21,8 +28,13 @@ export async function onRequestPost(context) {
   const raw = typeof data.platform === 'string' ? data.platform.toLowerCase().trim() : '';
   const platform = ['android', 'iphone'].includes(raw) ? raw : 'android';
 
-  // Name is optional; sanitise to plain text
-  const name = typeof data.name === 'string' ? data.name.trim().slice(0, 80) : null;
+  // Name is optional; sanitise to plain text. Strip any leading character that
+  // spreadsheet software (Excel/Sheets) interprets as a formula prefix, since
+  // this column gets exported for the Play Store closed-test tester list.
+  let name = typeof data.name === 'string' ? data.name.trim().slice(0, 80) : null;
+  if (name) {
+    name = name.replace(/^[=+\-@\t\r]+/, '').trim() || null;
+  }
 
   try {
     await env.DB.prepare(
