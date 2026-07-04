@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy — SunPlanner</title>
+  <title>SunPlanner: Privacy Policy</title>
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -116,57 +116,63 @@
   <main>
     <p class="page-label">Legal</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: June 2026</p>
+    <p class="updated">Last updated: June 18, 2026</p>
 
     <div class="location-notice">
-      <p>Your GPS location stays on your device. SunPlanner uses it to compute forecasts locally and never sends your exact coordinates to our servers or stores them.</p>
+      <p>SunPlanner needs your location to forecast solar production for the exact spot you are parked. To do that, your coordinates are sent to the weather and map services listed in section 3. SunPlanner has no user accounts, so your location is never tied to a name or profile. Your equipment details and production history stay on your device and are never uploaded.</p>
     </div>
 
-    <p>SunPlanner ("we," "us," or "our") is a solar forecasting application for off-grid solar users. This policy explains what information we collect, how we use it, and your rights. We collect only what we need and do not sell your data.</p>
+    <p>SunPlanner ("we," "us," or "our") is a solar production forecasting app for off-grid setups: RVs, vans, skoolies, cabins, and homesteads. This policy explains, in plain language, what the app collects, where it goes, and how to get your data removed. We do not sell your data, we do not run ads, and the app has no analytics or tracking SDK of any kind.</p>
 
-    <h2>1. Information we collect</h2>
-    <p>We collect the following:</p>
+    <h2>1. What the app collects</h2>
     <ul>
-      <li><strong>Location data.</strong> The app accesses your device GPS to compute solar forecasts and sun-position calculations for your spot. Forecasts are computed for your coordinates. Your exact location is not stored on our servers or shared with third parties beyond what is needed to fetch weather data (see section 3).</li>
-      <li><strong>Saved locations.</strong> Locations you save within the app are stored locally on your device. They are not synced to our servers.</li>
-      <li><strong>Email address (waitlist only).</strong> If you join our waitlist at sunplanner.subtl.agency, we collect your email address to notify you when testing opens. It is stored securely and used only for SunPlanner communications.</li>
-      <li><strong>Anonymized usage data.</strong> We may collect anonymized crash reports and usage statistics to improve stability. This data does not include personally identifiable information.</li>
+      <li><strong>Your location (GPS).</strong> The app uses your device location to compute the solar forecast and sun position for your spot. Your coordinates are sent to the weather and map providers in section 3 so the app can fetch a forecast and draw a map. We do not keep a record of your past locations on our own servers.</li>
+      <li><strong>Your equipment and production history (stays on your device).</strong> Details you enter (panel wattage, inverter type, battery setup) and your calibration and production history are stored only on your device. They are never sent to us or anyone else.</li>
+      <li><strong>Crash and diagnostic data.</strong> If the app crashes or hits an error, we receive a technical report (what went wrong, your device model, operating system version, and app version) through Sentry. These reports contain no name, no email, and no location.</li>
+      <li><strong>App update checks.</strong> When the app starts, it checks our update service (Expo) for a newer version. That check sends only the platform and app version. No personal data, no location.</li>
+      <li><strong>Waitlist email (website only).</strong> If you enter your email on the SunPlanner website to join the waitlist, we store it to let you know when testing or launch opens. It is used only for SunPlanner messages.</li>
     </ul>
 
-    <h2>2. How we use your information</h2>
+    <h2>2. Why we use it</h2>
     <ul>
-      <li>Location data is used to compute solar production forecasts and sun position for your current or saved spots.</li>
-      <li>Email addresses are used to send tester invitations, launch announcements, and updates about SunPlanner. You can unsubscribe at any time.</li>
-      <li>Anonymized usage data is used to fix bugs and improve the app.</li>
+      <li>Location is used only to compute the forecast and sun position for your current or saved spot, and to center the in-app map on you.</li>
+      <li>Crash and diagnostic data is used to find and fix bugs and keep the app stable.</li>
+      <li>The update check is used to deliver app improvements.</li>
+      <li>Your waitlist email is used to send tester invitations and launch news. You can unsubscribe or ask us to delete it at any time.</li>
     </ul>
 
-    <h2>3. Data sharing</h2>
-    <p>We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
-    <p>We use the following third-party services to operate the app:</p>
+    <h2>3. Who receives your location</h2>
+    <p>To turn your coordinates into a forecast and a map, the app sends your location to these services. Each receives only your coordinates, never your identity (because the app has none to send):</p>
     <ul>
-      <li><strong>Open-Meteo</strong> — weather and cloud cover data. Your general location is sent to their API to retrieve forecasts. See their privacy policy at open-meteo.com.</li>
-      <li><strong>Hostinger</strong> — hosting and infrastructure for our website. See hostinger.com/privacy-policy.</li>
+      <li><strong>Open-Meteo</strong> provides the weather, cloud cover, and solar data behind the forecast. <a href="https://open-meteo.com/en/terms">open-meteo.com</a></li>
+      <li><strong>BigDataCloud</strong> turns your coordinates into a place name (for example "near Flagstaff, AZ") so the app can label your location on screen. <a href="https://www.bigdatacloud.com/privacy-and-cookie-policy">bigdatacloud.com</a></li>
+      <li><strong>Pirate Weather</strong>, reached through a small relay we operate, provides minute-by-minute rain timing. Your coordinates are sent to our relay, which forwards them to Pirate Weather. <a href="https://pirateweather.net/">pirateweather.net</a></li>
+      <li><strong>Mapbox</strong> draws the in-app map. When a map is on screen, Mapbox receives the map area (centered on you) and standard map usage data. Mapbox provides its own opt-out within the map's attribution menu. <a href="https://www.mapbox.com/legal/privacy">mapbox.com/legal/privacy</a></li>
     </ul>
-    <p>We may disclose information if required by law or to protect the safety of our users.</p>
+    <p>We also use <strong>Sentry</strong> for the crash reports described above (<a href="https://sentry.io/privacy/">sentry.io/privacy</a>) and <strong>Expo</strong> for app update checks (<a href="https://expo.dev/privacy">expo.dev/privacy</a>). Neither receives your location.</p>
+    <p>We do not sell, rent, or trade your information, and we do not share it with anyone for advertising.</p>
 
-    <h2>4. Data retention</h2>
-    <p>Waitlist email addresses are kept until you request removal or until 12 months after the app launches publicly, whichever comes first. Anonymized usage data may be retained indefinitely in aggregate form.</p>
+    <h2>4. What never leaves your device</h2>
+    <p>Your saved equipment specs, your calibration data, and your production history live only in the app's local storage on your phone. They are not synced to a server, not backed up to us, and not shared. If you uninstall the app, that data is gone.</p>
 
-    <h2>5. Your rights</h2>
-    <p>You may ask us to delete your email address from our waitlist at any time. Contact us at the address below and we will remove it within 7 days.</p>
-    <p>If you are in the European Economic Area, you have additional rights under GDPR, including the right to access, correct, or port your personal data. Contact us to exercise these rights.</p>
+    <h2>5. How long we keep things</h2>
+    <p>We do not store your location on our servers, so there is nothing on our side to retain there. Crash and diagnostic reports are kept only as long as needed to fix problems. Waitlist email addresses are kept until you ask us to remove them, or until 12 months after the app launches publicly, whichever comes first.</p>
 
-    <h2>6. Children</h2>
-    <p>SunPlanner is not directed at children under 13. We do not knowingly collect information from children under 13. If you believe a child has provided us with personal information, contact us and we will delete it.</p>
+    <h2>6. Your choices and your rights</h2>
+    <p>You control the location permission in your device settings and can turn it off at any time (the forecast will not work without it). You can clear your on-device data by clearing the app's storage or uninstalling it.</p>
+    <p>To have your waitlist email removed, or to ask any question about your data, email us at the address below and we will act within 7 days. If you are in the European Economic Area or the UK, you have additional rights under GDPR (access, correction, deletion, and portability); contact us to use them.</p>
 
-    <h2>7. Changes to this policy</h2>
-    <p>We may update this policy as the app evolves. Material changes will be noted on this page with an updated date. Continued use of the app after changes means you accept the updated policy.</p>
+    <h2>7. Children</h2>
+    <p>SunPlanner is not directed at children under 13, and we do not knowingly collect information from them. If you believe a child has provided us information, contact us and we will delete it.</p>
 
-    <h2>8. Contact</h2>
-    <p>Questions about this policy or requests to delete your data:</p>
+    <h2>8. Changes to this policy</h2>
+    <p>We may update this policy as the app changes. Meaningful changes will be noted here with a new date at the top. Continued use after a change means you accept the updated policy.</p>
+
+    <h2>9. Contact</h2>
+    <p>Questions about this policy, or a request to delete your data:</p>
     <div class="contact-block">
       <p>SunPlanner<br>
-      Email: <a href="mailto:sunplanner@subtl.agency">sunplanner@subtl.agency</a></p>
+      Email: <a href="mailto:SunPlanner@subtl.agency">SunPlanner@subtl.agency</a></p>
     </div>
   </main>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "95a9cd9b91094999afb60610729e439e"}'></script><!-- End Cloudflare Web Analytics -->
