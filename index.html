@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SunPlanner: Solar Production Forecast, Calibrated to Your Panels</title>
-  <meta name="description" content="A 16-day solar production forecast calibrated to your actual panels and location. For cabins, RVs, boats, and off-grid homes.">
-  <meta property="og:title" content="SunPlanner: Solar Production Forecast, Calibrated to Your Panels">
-  <meta property="og:description" content="A 16-day solar production forecast calibrated to your actual panels and location.">
+  <title>SunPlanner: Notify Me at Launch</title>
+  <meta name="description" content="Sign up to get notified when SunPlanner opens for testing.">
+  <meta property="og:title" content="SunPlanner: Notify Me at Launch">
+  <meta property="og:description" content="Sign up to get notified when SunPlanner opens for testing.">
   <meta name="theme-color" content="#080714">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,53 +96,6 @@
       max-width: 520px;
       margin: 0 auto 28px;
       text-shadow: 0 1px 16px rgba(0,0,0,0.6);
-    }
-
-    /* Value panels */
-    .hero-values {
-      display: flex;
-      gap: 1px;
-      max-width: 580px;
-      margin: 0 auto;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      text-align: left;
-    }
-
-    .hero-value {
-      flex: 1;
-      padding: 14px 16px;
-      background: rgba(8, 7, 20, 0.78);
-      border-left: 2px solid rgba(245,225,74,0.50);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .hero-value-label {
-      font-family: var(--font-mono);
-      font-size: 8px;
-      letter-spacing: 0.16em;
-      color: var(--solar);
-      text-transform: uppercase;
-    }
-
-    .hero-value-claim {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.25;
-    }
-
-    .hero-value-note {
-      font-family: var(--font-mono);
-      font-size: 0.64rem;
-      color: rgba(255,255,255,0.42);
-      line-height: 1.45;
     }
 
     /* CTA SECTION -- dark zone below hero sky */
@@ -349,164 +302,6 @@
       padding: 0 28px;
     }
 
-    .section-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      color: var(--solar);
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    /* CALIBRATION EXPLAINER */
-    #why {
-      background: var(--deep);
-      padding: 96px 0;
-      border-top: 1px solid rgba(255,255,255,0.055);
-    }
-
-    #why h2 {
-      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
-      font-weight: 700;
-      letter-spacing: -0.022em;
-      margin-bottom: 20px;
-    }
-
-    #why .why-body {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.60);
-      line-height: 1.78;
-      max-width: 620px;
-      margin-bottom: 48px;
-    }
-
-    /* Phone frame */
-    .phone-frame-wrap {
-      display: flex;
-      justify-content: center;
-    }
-
-    .phone-frame {
-      width: 220px;
-      background: #0D0B1E;
-      border: 2px solid rgba(255,255,255,0.10);
-      border-radius: 30px;
-      padding: 14px 8px;
-      box-shadow:
-        0 40px 80px rgba(0,0,0,0.60),
-        0 0 0 1px rgba(255,255,255,0.04),
-        inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-
-    .phone-notch {
-      width: 56px;
-      height: 6px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 3px;
-      margin: 0 auto 10px;
-    }
-
-    .phone-screen {
-      border-radius: 18px;
-      overflow: hidden;
-    }
-
-    .phone-screen img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* FEATURES */
-    #features {
-      background: var(--night);
-      padding: 96px 0;
-      border-top: 1px solid rgba(255,255,255,0.055);
-    }
-
-    #features > .container > h2 {
-      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
-      font-weight: 700;
-      letter-spacing: -0.022em;
-      margin-bottom: 56px;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1px;
-      border: 1px solid rgba(255,255,255,0.065);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: rgba(255,255,255,0.065);
-    }
-
-    .benefit {
-      padding: 36px 30px;
-      background: var(--deep);
-    }
-
-    .benefit-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      color: var(--solar);
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    .benefit h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    .benefit p {
-      font-size: 0.88rem;
-      line-height: 1.72;
-      color: rgba(255,255,255,0.50);
-    }
-
-    /* TESTERS */
-    #testers {
-      background: var(--deep);
-      padding: 96px 0;
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.055);
-    }
-
-    .tester-badge {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      color: var(--solar);
-      border: 1px solid var(--solar-border);
-      border-radius: 2px;
-      padding: 5px 11px;
-      margin-bottom: 28px;
-      text-transform: uppercase;
-    }
-
-    #testers h2 {
-      font-size: clamp(1.8rem, 3.8vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.022em;
-      line-height: 1.12;
-      margin-bottom: 20px;
-    }
-
-    #testers p {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.58);
-      line-height: 1.75;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
     /* FOOTER */
     footer {
       background: var(--deep);
@@ -694,10 +489,6 @@
     }
 
     /* RESPONSIVE */
-    @media (max-width: 520px) {
-      .hero-values { flex-direction: column; max-width: 340px; }
-    }
-
     @media (max-width: 440px) {
       .waitlist-form { flex-direction: column; }
       .waitlist-form input[type="email"] {
@@ -718,27 +509,9 @@
     <canvas id="sky-canvas" aria-hidden="true"></canvas>
 
     <div class="hero-content">
-      <p class="hero-eyebrow">Calibrated Solar Forecasting</p>
+      <p class="hero-eyebrow">Coming Soon</p>
       <h1>A solar forecast<br>tuned to your actual panels.</h1>
-      <p class="hero-sub">SunPlanner calibrates its 16-day production forecast to what your system actually makes, so the numbers reflect your rig, not a generic estimate. The compass is calibrated too, so sun-finding stays accurate even next to metal and battery banks.</p>
-
-      <div class="hero-values" aria-label="Key features">
-        <div class="hero-value">
-          <span class="hero-value-label">Calibrated</span>
-          <span class="hero-value-claim">Numbers from your actual panels</span>
-          <span class="hero-value-note">Tuned to your output, not a regional estimate.</span>
-        </div>
-        <div class="hero-value">
-          <span class="hero-value-label">16 Days</span>
-          <span class="hero-value-claim">See what's coming</span>
-          <span class="hero-value-note">Sun and clouds, day by day, two weeks out.</span>
-        </div>
-        <div class="hero-value">
-          <span class="hero-value-label">Your Spot</span>
-          <span class="hero-value-claim">Accurate where you're set up</span>
-          <span class="hero-value-note">Right even next to metal and battery banks.</span>
-        </div>
-      </div>
+      <p class="hero-sub">SunPlanner isn't live yet. Sign up and we'll notify you the moment it opens for testing.</p>
     </div>
   </section>
 
@@ -747,56 +520,6 @@
     <div class="container">
       <p class="free-year-hook">First 20 testers get a free year.</p>
       <div id="cta-zone"></div>
-    </div>
-  </section>
-
-  <!-- CALIBRATION EXPLAINER -->
-  <section id="why">
-    <div class="container">
-      <div class="section-label">Calibration</div>
-      <h2>Why the numbers are actually right</h2>
-      <p class="why-body">Other solar apps estimate from your panel specs and stop there. SunPlanner keeps going: it tunes the forecast to what your system actually produces, so the numbers match your rig. No other app calibrates to your real output. On the compass side, metal and battery banks shift the magnetometer reading by 10 to 30 degrees. SunPlanner calibrates that too, so sun-finding stays accurate in the places you actually use it.</p>
-      <div class="phone-frame-wrap">
-        <div class="phone-frame">
-          <div class="phone-notch" aria-hidden="true"></div>
-          <div class="phone-screen">
-            <img src="dashboard.png" alt="SunPlanner forecast dashboard: today 18.8 kWh on a clear sunny day, multi-day outlook showing consistent production" loading="lazy">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section id="features">
-    <div class="container">
-      <h2>What it does</h2>
-      <div class="benefits-grid">
-        <div class="benefit">
-          <div class="benefit-label">Forecast</div>
-          <h3>Built around your setup</h3>
-          <p>Give it your panel specs and a location, and you get a day-by-day production forecast. Your current spot, your cabin, your mooring, or anywhere you're considering. Not a regional average.</p>
-        </div>
-        <div class="benefit">
-          <div class="benefit-label">Anywhere</div>
-          <h3>Forecast for any location</h3>
-          <p>Save spots or tap the map. Useful before you decide where to set up, or just to see what tomorrow looks like from where you are now.</p>
-        </div>
-        <div class="benefit">
-          <div class="benefit-label">Sun Finder</div>
-          <h3>Find the sun for your exact spot</h3>
-          <p>Point your phone and see where the sun rises, how high it gets, and when it sets. Helpful when trees, a hill, or a building is cutting your production day short.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTERS -->
-  <section id="testers">
-    <div class="container">
-      <div class="tester-badge">Early Tester Program</div>
-      <h2>Help test it in real conditions.<br>First 20 testers get a free year.</h2>
-      <p>SunPlanner is entering closed beta on Android first, with an iPhone build on the way. We want testers with real systems: panels, an inverter, actual production numbers to calibrate against. Pick your platform above and join the list. The first 20 testers get the full app free for a year. No credit card, no auto-billing.</p>
     </div>
   </section>
 
