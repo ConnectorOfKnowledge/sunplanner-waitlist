@@ -116,18 +116,20 @@
   <main>
     <p class="page-label">Legal</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: July 5, 2026</p>
+    <p class="updated">Last updated: July 20, 2026</p>
 
     <div class="location-notice">
-      <p>SunPlanner needs your location to forecast solar production for the exact spot you are parked. To do that, your coordinates are sent to the weather and map services listed in section 3. SunPlanner has no user accounts, so your location is never tied to a name or profile. Your equipment details and production history stay on your device and are never uploaded.</p>
+      <p>SunPlanner needs your location to forecast solar production for the exact spot you are parked. To do that, your coordinates are sent to the weather and map services listed in section 3. Your equipment details and production history stay on your device and are never uploaded.</p>
     </div>
 
-    <p>SunPlanner ("we," "us," or "our") is a solar production forecasting app for off-grid setups: RVs, vans, skoolies, cabins, and homesteads. This policy explains, in plain language, what the app collects, where it goes, and how to get your data removed. We do not sell your data, we do not run ads, and the app has no analytics or tracking SDK of any kind.</p>
+    <p>SunPlanner ("we," "us," or "our") is a solar production forecasting app for off-grid setups: RVs, vans, skoolies, cabins, and homesteads. This policy explains, in plain language, what the app collects, where it goes, and how to get your data removed. We do not sell your data, we do not run ads, and the app has no advertising or analytics tracking SDK of any kind.</p>
 
     <h2>1. What the app collects</h2>
     <ul>
       <li><strong>Your location (GPS).</strong> The app uses your device location to compute the solar forecast and sun position for your spot. Your coordinates are sent to the weather and map providers in section 3 so the app can fetch a forecast and draw a map. We do not keep a record of your past locations on our own servers.</li>
       <li><strong>Your equipment and production history (stays on your device).</strong> Details you enter (panel wattage, inverter type, battery setup) and your calibration and production history are stored only on your device. They are never sent to us or anyone else.</li>
+      <li><strong>Your Google account, if you choose to sign in.</strong> Signing in is optional. If you sign in with Google, we receive your Google account identifier and use it to keep your subscription and purchases tied to your account across devices. We do not receive or store your Google password.</li>
+      <li><strong>Purchase and subscription status.</strong> If you subscribe or buy the lifetime option, Google Play Billing processes the payment and RevenueCat manages your subscription status so the app knows what you've unlocked. Neither receives your location or equipment data.</li>
       <li><strong>Crash and diagnostic data.</strong> If the app crashes or hits an error, we receive a technical report (what went wrong, your device model, operating system version, and app version) through Sentry. These reports contain no name, no email, and no location, and we are turning off IP address collection as well.</li>
       <li><strong>App update checks.</strong> When the app starts, it checks our update service (Expo) for a newer version. That check sends only the platform and app version. No personal data, no location.</li>
       <li><strong>Waitlist email (website only).</strong> If you enter your email on the SunPlanner website to join the waitlist, we store it to let you know when testing or launch opens. It is used only for SunPlanner messages.</li>
@@ -136,18 +138,27 @@
     <h2>2. Why we use it</h2>
     <ul>
       <li>Location is used only to compute the forecast and sun position for your current or saved spot, and to center the in-app map on you.</li>
+      <li>Your Google account, if you sign in, is used to keep your subscription and purchases attached to you across devices and to prevent free-trial abuse (see section 5's retention note).</li>
+      <li>Purchase and subscription data is used to unlock the features you've paid for and to process billing.</li>
       <li>Crash and diagnostic data is used to find and fix bugs and keep the app stable.</li>
       <li>The update check is used to deliver app improvements.</li>
       <li>Your waitlist email is used to send tester invitations and launch news. You can unsubscribe or ask us to delete it at any time.</li>
     </ul>
 
-    <h2>3. Who receives your location</h2>
-    <p>To turn your coordinates into a forecast and a map, the app sends your location to these services. Each receives only your coordinates, never your identity (because the app has none to send):</p>
+    <h2>3. Who receives your data</h2>
+    <p>To turn your coordinates into a forecast and a map, the app sends your location to these services. Each receives only your coordinates, never your identity:</p>
     <ul>
       <li><strong>Open-Meteo</strong> provides the weather, cloud cover, and solar data behind the forecast. <a href="https://open-meteo.com/en/terms">open-meteo.com</a></li>
       <li><strong>BigDataCloud</strong> turns your approximate coordinates into a place name (for example "near Flagstaff, AZ") so the app can label your location on screen. <a href="https://www.bigdatacloud.com/privacy-and-cookie-policy">bigdatacloud.com</a></li>
       <li><strong>Pirate Weather</strong>, reached through a small relay we operate, provides minute-by-minute rain timing. Your coordinates are sent to our relay, which forwards them to Pirate Weather. <a href="https://pirateweather.net/">pirateweather.net</a></li>
       <li><strong>Mapbox</strong> draws the in-app map. When a map is on screen, Mapbox receives the map area (centered on you) and standard map usage data. Mapbox provides its own opt-out within the map's attribution menu. <a href="https://www.mapbox.com/legal/privacy">mapbox.com/legal/privacy</a></li>
+    </ul>
+    <p>For sign-in and purchases, these services receive account and billing data, never your location or equipment data:</p>
+    <ul>
+      <li><strong>Google Sign-In</strong> handles authentication if you choose to sign in. Google's own privacy policy applies to your Google account. <a href="https://policies.google.com/privacy">policies.google.com/privacy</a></li>
+      <li><strong>Supabase</strong> stores your account identity (if you sign in) and the minimum data needed to run the app's backend, hosted on Supabase's infrastructure. <a href="https://supabase.com/privacy">supabase.com/privacy</a></li>
+      <li><strong>RevenueCat</strong> manages subscription and purchase status on our behalf. <a href="https://www.revenuecat.com/privacy/">revenuecat.com/privacy</a></li>
+      <li><strong>Google Play Billing</strong> processes all payments. SunPlanner never sees or stores your payment card details. <a href="https://policies.google.com/privacy">policies.google.com/privacy</a></li>
     </ul>
     <p>We also use <strong>Sentry</strong> for the crash reports described above (<a href="https://sentry.io/privacy/">sentry.io/privacy</a>) and <strong>Expo</strong> for app update checks (<a href="https://expo.dev/privacy">expo.dev/privacy</a>). Neither receives your location.</p>
     <p>We do not sell, rent, or trade your information, and we do not share it with anyone for advertising.</p>
@@ -157,18 +168,25 @@
 
     <h2>5. How long we keep things</h2>
     <p>We do not store your location on our servers, so there is nothing on our side to retain there. Crash and diagnostic reports are kept only as long as needed to fix problems. Waitlist email addresses are kept until you ask us to remove them, or until 12 months after the app launches publicly, whichever comes first.</p>
+    <p><strong>If you delete your account</strong> (see section 6), we remove your Supabase identity and your RevenueCat customer record. We do keep a one-way cryptographic hash of your linked Google account identifier, which cannot be reversed to reveal who you are, only to prevent the same person from repeatedly claiming free-trial or promotional offers after deleting an account. It is not personal data in any usable sense and is not linked to anything else about you.</p>
 
-    <h2>6. Your choices and your rights</h2>
+    <h2>6. Deleting your account</h2>
+    <p>You can delete your account in the app at Settings &gt; Account &gt; Delete account. If you can no longer sign in, or the app isn't available to you, email us at the address in section 9 from the same Google address linked to your account, and we will complete the deletion once we've confirmed it's really you.</p>
+    <p>Deleting your account removes your Supabase identity and your RevenueCat customer record (except the fraud-prevention hash described in section 5). It does not remove data saved only on your device (your equipment specs, calibration, and production history). Clear the app's storage or uninstall it to remove those.</p>
+    <p><strong>Deleting your account does not cancel an active subscription.</strong> If you have a subscription running through Google Play, it keeps billing until you cancel it separately at <a href="https://play.google.com/store/account/subscriptions">play.google.com/store/account/subscriptions</a>. Cancel your subscription there first if you don't want to be charged again.</p>
+    <p>Full details, including the in-app steps and the email-fallback path, are also on our dedicated page: <a href="/delete-account">sunplanner.subtl.agency/delete-account</a>.</p>
+
+    <h2>7. Your choices and other rights</h2>
     <p>You control the location permission in your device settings and can turn it off at any time (the forecast will not work without it). You can clear your on-device data by clearing the app's storage or uninstalling it.</p>
     <p>To have your waitlist email removed, or to ask any question about your data, email us at the address below and we will act within 7 days. If you are in the European Economic Area or the UK, you have additional rights under GDPR (access, correction, deletion, and portability); contact us to use them.</p>
 
-    <h2>7. Children</h2>
+    <h2>8. Children</h2>
     <p>SunPlanner is not directed at children under 13, and we do not knowingly collect information from them. If you believe a child has provided us information, contact us and we will delete it.</p>
 
-    <h2>8. Changes to this policy</h2>
+    <h2>9. Changes to this policy</h2>
     <p>We may update this policy as the app changes. Meaningful changes will be noted here with a new date at the top. Continued use after a change means you accept the updated policy.</p>
 
-    <h2>9. Contact</h2>
+    <h2>10. Contact</h2>
     <p>Questions about this policy, or a request to delete your data:</p>
     <div class="contact-block">
       <p>SunPlanner<br>
