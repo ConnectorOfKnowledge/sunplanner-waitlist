@@ -22,6 +22,68 @@ async function checkRateLimit(request, env) {
   return true;
 }
 
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+// P16: real-time signup notification to Lonnie's phone. Fired only on a genuinely
+// fresh signup (never on the duplicate-email or honeypot paths -- see call site).
+// Fails open by design: any error here is logged and swallowed, never surfaced to
+// the signup response, and env.waitUntil keeps it off the response's critical path.
+//
+// The `mode:{source}` KV flag is the noise valve from the 90-day plan (P16): flipping
+// it to "digest" stops the real-time push, but no digest SENDER exists yet to consume
+// the counter it keeps accumulating -- that's a separate, not-yet-built Worker. Until
+// that exists, flipping this to "digest" produces silence, not a daily summary. Do not
+// flip it before the sender is built.
+async function sendSignupPush(env, context, { platform, name, source }) {
+  if (!env.PUSHOVER_APP_TOKEN || !env.PUSHOVER_USER_KEY) return; // secrets not provisioned yet
+
+  const push = (async () => {
+    try {
+      const mode = (await env.RATE_LIMIT_KV.get(`mode:${source}`)) || 'realtime';
+
+      const today = new Date().toISOString().slice(0, 10); // UTC YYYY-MM-DD
+      const countKey = `cnt:${source}:${today}`;
+      const current = await env.RATE_LIMIT_KV.get(countKey);
+      const count = (current ? parseInt(current, 10) : 0) + 1;
+      const midnightUTC = new Date();
+      midnightUTC.setUTCHours(24, 0, 0, 0);
+      const ttl = Math.max(60, Math.floor((midnightUTC.getTime() - Date.now()) / 1000));
+      await env.RATE_LIMIT_KV.put(countKey, String(count), { expirationTtl: ttl });
+
+      if (mode !== 'realtime') return; // valved off -- see comment above the function
+
+      // Deliberately no email in the push body -- Pushover is a third party this
+      // project hasn't disclosed as a data recipient, and email isn't needed to feel
+      // the traction. Platform + name (if given) + running count is enough; full
+      // detail is one D1 query away.
+      const who = name ? `${name} (${platform})` : platform;
+      const message = `${who} -- ${ordinal(count)} waitlist signup today`;
+
+      await fetch('https://api.pushover.net/1/messages.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          token: env.PUSHOVER_APP_TOKEN,
+          user: env.PUSHOVER_USER_KEY,
+          title: 'New waitlist signup',
+          message,
+          // Priority 1 bypasses Pushover quiet hours -- the whole point of this
+          // feature is Lonnie feeling it the instant it happens, not next morning.
+          priority: '1',
+        }).toString(),
+      });
+    } catch (err) {
+      console.error('signup push failed (fail-open, never blocks signup):', err);
+    }
+  })();
+
+  context.waitUntil(push);
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -73,7 +135,8 @@ export async function onRequestPost(context) {
       'INSERT INTO signups (email, platform, name) VALUES (?, ?, ?)'
     ).bind(email, platform, name || null).run();
   } catch (err) {
-    // Duplicate (email, platform) pair means already signed up -- treat as success
+    // Duplicate (email, platform) pair means already signed up -- treat as success,
+    // but NOT a new signup, so no push (a resubmit/double-click must stay silent).
     if (err.message && err.message.includes('UNIQUE constraint failed')) {
       return Response.json({ success: true });
     }
@@ -83,6 +146,10 @@ export async function onRequestPost(context) {
       { status: 500 }
     );
   }
+
+  // Only reached on a genuinely fresh insert -- the duplicate and honeypot paths
+  // above both return earlier and never reach here.
+  await sendSignupPush(env, context, { platform, name, source: 'waitlist' });
 
   return Response.json({ success: true });
 }
