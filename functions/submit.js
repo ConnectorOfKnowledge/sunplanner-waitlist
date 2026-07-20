@@ -61,7 +61,8 @@ async function sendSignupPush(env, context, { platform, name, source }) {
       // the traction. Platform + name (if given) + running count is enough; full
       // detail is one D1 query away.
       const who = name ? `${name} (${platform})` : platform;
-      const message = `${who} -- ${ordinal(count)} waitlist signup today`;
+      const label = source === 'newsletter' ? 'newsletter signup' : 'waitlist signup';
+      const message = `${who} -- ${ordinal(count)} ${label} today`;
 
       await fetch('https://api.pushover.net/1/messages.json', {
         method: 'POST',
@@ -69,7 +70,7 @@ async function sendSignupPush(env, context, { platform, name, source }) {
         body: new URLSearchParams({
           token: env.PUSHOVER_APP_TOKEN,
           user: env.PUSHOVER_USER_KEY,
-          title: 'New waitlist signup',
+          title: source === 'newsletter' ? 'New newsletter signup' : 'New waitlist signup',
           message,
           // Priority 1 bypasses Pushover quiet hours -- the whole point of this
           // feature is Lonnie feeling it the instant it happens, not next morning.
@@ -130,26 +131,76 @@ export async function onRequestPost(context) {
     name = name.replace(/^[=+\-@\t\r]+/, '').trim() || null;
   }
 
-  try {
-    await env.DB.prepare(
-      'INSERT INTO signups (email, platform, name) VALUES (?, ?, ?)'
-    ).bind(email, platform, name || null).run();
-  } catch (err) {
-    // Duplicate (email, platform) pair means already signed up -- treat as success,
-    // but NOT a new signup, so no push (a resubmit/double-click must stay silent).
-    if (err.message && err.message.includes('UNIQUE constraint failed')) {
-      return Response.json({ success: true });
-    }
-    console.error('D1 insert error:', err);
-    return Response.json(
-      { success: false, error: 'Server error. Please try again.' },
-      { status: 500 }
-    );
+  // P8: newsletter front door. `source` distinguishes which form this came from
+  // (defaults to 'waitlist' for the original CTA, unchanged behavior). Phone is
+  // optional and lightly sanitised, not strictly validated (E.164 enforcement is
+  // a later nice-to-have, not a launch blocker).
+  const source = data.source === 'newsletter' ? 'newsletter' : 'waitlist';
+  const newsletterConsent = data.newsletterConsent === true;
+  let phone = typeof data.phone === 'string' ? data.phone.trim().slice(0, 20) : null;
+  if (phone) {
+    phone = phone.replace(/[^\d+\-() ]/g, '') || null;
   }
 
-  // Only reached on a genuinely fresh insert -- the duplicate and honeypot paths
-  // above both return earlier and never reach here.
-  await sendSignupPush(env, context, { platform, name, source: 'waitlist' });
+  let isNewRow = false;
+  try {
+    await env.DB.prepare(
+      'INSERT INTO signups (email, platform, name, newsletter_consent, phone, source) VALUES (?, ?, ?, ?, ?, ?)'
+    ).bind(email, platform, name || null, newsletterConsent ? 1 : 0, phone, source).run();
+    isNewRow = true;
+  } catch (err) {
+    if (!(err.message && err.message.includes('UNIQUE constraint failed'))) {
+      console.error('D1 insert error:', err);
+      return Response.json(
+        { success: false, error: 'Server error. Please try again.' },
+        { status: 500 }
+      );
+    }
+
+    // Row already exists for this (email, platform) -- this is the P8 re-opt-in path:
+    // an existing waitlister filling the /newsletter form, or someone re-subscribing
+    // after a previous unsubscribe. Update instead of silently dropping the new
+    // fields (the original code just returned success here and threw them away).
+    // Only touch fields this request actually supplied; never stomp existing data
+    // with nulls from an unrelated resubmit.
+    const sets = [];
+    const binds = [];
+    if (name) {
+      sets.push('name = ?');
+      binds.push(name);
+    }
+    if (newsletterConsent) {
+      // Granting consent also clears any prior suppression -- an explicit new
+      // opt-in is exactly the self-service "re-subscribe" path a suppressed
+      // person needs.
+      sets.push('newsletter_consent = 1', 'suppressed = 0');
+    }
+    if (phone) {
+      sets.push('phone = ?');
+      binds.push(phone);
+    }
+    if (source === 'newsletter') {
+      sets.push('source = ?');
+      binds.push(source);
+    }
+    if (sets.length) {
+      binds.push(email, platform);
+      try {
+        await env.DB.prepare(
+          `UPDATE signups SET ${sets.join(', ')} WHERE email = ? AND platform = ?`
+        ).bind(...binds).run();
+      } catch (updateErr) {
+        console.error('D1 update-on-conflict error (fail-open, still reports success):', updateErr);
+      }
+    }
+    return Response.json({ success: true });
+  }
+
+  // Only reached on a genuinely fresh insert -- the duplicate/re-opt-in path above
+  // and the honeypot path both return earlier and never reach here.
+  if (isNewRow) {
+    await sendSignupPush(env, context, { platform, name, source });
+  }
 
   return Response.json({ success: true });
 }
