@@ -35,7 +35,8 @@ test('stores bounded attribution through SQL parameters', async () => {
   assert.equal(ctx.calls.length, 1);
   assert.match(ctx.calls[0].sql, /campaign_source, campaign_medium, landing_path/);
   assert.deepEqual(ctx.calls[0].values, [
-    'person@example.com', 'iphone', '2+2', 'newsletter.august', 'email', '/field-notes/clouds/',
+    'person@example.com', 'iphone', '2+2', 0, null, 'waitlist',
+    'newsletter.august', 'email', '/field-notes/clouds/',
   ]);
 });
 
@@ -46,7 +47,21 @@ test('drops malformed attribution without rejecting a real signup', async () => 
   });
   const response = await onRequestPost(ctx.value);
   assert.equal(response.status, 200);
-  assert.deepEqual(ctx.calls[0].values.slice(3), [null, null, null]);
+  assert.deepEqual(ctx.calls[0].values.slice(6), [null, null, null]);
+});
+
+test('preserves newsletter routing while keeping campaign attribution separate', async () => {
+  const ctx = context({
+    email: 'reader@example.com', platform: 'android', website: '',
+    source: 'newsletter', newsletterConsent: true, phone: '+1 (555) 010-0200',
+    campaign_source: 'community.august', medium: 'email', landing_path: '/newsletter/',
+  });
+  const response = await onRequestPost(ctx.value);
+  assert.equal(response.status, 200);
+  assert.deepEqual(ctx.calls[0].values, [
+    'reader@example.com', 'android', null, 1, '+1 (555) 010-0200', 'newsletter',
+    'community.august', 'email', '/newsletter/',
+  ]);
 });
 
 test('honeypot returns success without touching D1', async () => {
