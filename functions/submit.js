@@ -1,6 +1,20 @@
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_SECONDS = 600; // 10 minutes
 
+function optionalCampaignValue(value, maxLength) {
+  if (typeof value !== 'string') return null;
+  const clean = value.trim();
+  if (!clean || clean.length > maxLength || !/^[a-zA-Z0-9._:/-]+$/.test(clean)) return null;
+  return clean;
+}
+
+function optionalLandingPath(value) {
+  if (typeof value !== 'string') return null;
+  const clean = value.trim();
+  if (!clean || clean.length > 300 || !clean.startsWith('/') || /[\u0000-\u001f\u007f?#]/.test(clean)) return null;
+  return clean;
+}
+
 // KV-based limiter, not the Workers ratelimit binding: the binding's `period`
 // field only accepts 10 or 60 seconds (verified against Cloudflare docs
 // 2026-07-02), so it can't express a 10-minute window. Fixed-window counter,
@@ -96,9 +110,24 @@ export async function onRequestPost(context) {
     );
   }
 
+  const announcedLength = Number(request.headers.get('Content-Length') || 0);
+  if (announcedLength > 4096) {
+    return Response.json({ success: false, error: 'Request is too large.' }, { status: 413 });
+  }
+
+  let rawBody;
+  try {
+    rawBody = await request.text();
+  } catch {
+    return Response.json({ success: false, error: 'Invalid request body.' }, { status: 400 });
+  }
+  if (new TextEncoder().encode(rawBody).byteLength > 4096) {
+    return Response.json({ success: false, error: 'Request is too large.' }, { status: 413 });
+  }
+
   let data;
   try {
-    data = await request.json();
+    data = JSON.parse(rawBody);
   } catch {
     return Response.json({ success: false, error: 'Invalid JSON.' }, { status: 400 });
   }
@@ -131,11 +160,23 @@ export async function onRequestPost(context) {
     name = name.replace(/^[=+\-@\t\r]+/, '').trim() || null;
   }
 
+  // Campaign fields are deliberately small, optional, and parameterized. They
+  // describe the website visit; they are not trusted as commands or URLs.
+  // `source` predates attribution and is also used by the newsletter form, so
+  // keep that product-routing value separate from the campaign source.
+  const signupSource = data.signup_source === 'newsletter' || data.source === 'newsletter'
+    ? 'newsletter'
+    : 'waitlist';
+  const rawCampaignSource = data.campaign_source ??
+    (data.source === 'newsletter' || data.source === 'waitlist' ? null : data.source);
+  const campaignSource = optionalCampaignValue(rawCampaignSource, 100);
+  const medium = optionalCampaignValue(data.medium, 60);
+  const landingPath = optionalLandingPath(data.landing_path);
+
   // P8: newsletter front door. `source` distinguishes which form this came from
   // (defaults to 'waitlist' for the original CTA, unchanged behavior). Phone is
   // optional and lightly sanitised, not strictly validated (E.164 enforcement is
   // a later nice-to-have, not a launch blocker).
-  const source = data.source === 'newsletter' ? 'newsletter' : 'waitlist';
   const newsletterConsent = data.newsletterConsent === true;
   let phone = typeof data.phone === 'string' ? data.phone.trim().slice(0, 20) : null;
   if (phone) {
@@ -144,9 +185,21 @@ export async function onRequestPost(context) {
 
   let isNewRow = false;
   try {
-    await env.DB.prepare(
-      'INSERT INTO signups (email, platform, name, newsletter_consent, phone, source) VALUES (?, ?, ?, ?, ?, ?)'
-    ).bind(email, platform, name || null, newsletterConsent ? 1 : 0, phone, source).run();
+    try {
+      await env.DB.prepare(
+        'INSERT INTO signups (email, platform, name, newsletter_consent, phone, source, campaign_source, campaign_medium, landing_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+      ).bind(
+        email, platform, name || null, newsletterConsent ? 1 : 0, phone, signupSource,
+        campaignSource, medium, landingPath
+      ).run();
+    } catch (schemaError) {
+      // Safe deployment ordering fallback: if code reaches an environment before
+      // migration 0002, signup still works and only attribution is omitted.
+      if (!String(schemaError?.message || '').includes('no column named')) throw schemaError;
+      await env.DB.prepare(
+        'INSERT INTO signups (email, platform, name, newsletter_consent, phone, source) VALUES (?, ?, ?, ?, ?, ?)'
+      ).bind(email, platform, name || null, newsletterConsent ? 1 : 0, phone, signupSource).run();
+    }
     isNewRow = true;
   } catch (err) {
     if (!(err.message && err.message.includes('UNIQUE constraint failed'))) {
@@ -179,9 +232,9 @@ export async function onRequestPost(context) {
       sets.push('phone = ?');
       binds.push(phone);
     }
-    if (source === 'newsletter') {
+    if (signupSource === 'newsletter') {
       sets.push('source = ?');
-      binds.push(source);
+      binds.push(signupSource);
     }
     if (sets.length) {
       binds.push(email, platform);
@@ -199,7 +252,7 @@ export async function onRequestPost(context) {
   // Only reached on a genuinely fresh insert -- the duplicate/re-opt-in path above
   // and the honeypot path both return earlier and never reach here.
   if (isNewRow) {
-    await sendSignupPush(env, context, { platform, name, source });
+    await sendSignupPush(env, context, { platform, name, source: signupSource });
   }
 
   return Response.json({ success: true });
