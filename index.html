@@ -30,7 +30,7 @@
       --font-mono: 'DM Mono', 'Courier New', monospace;
     }
 
-    html { scroll-behavior: smooth; }
+    html { color-scheme: dark; scroll-behavior: smooth; }
 
     body {
       background: var(--night);
@@ -146,6 +146,11 @@
       overflow: hidden;
     }
 
+    .waitlist-form:focus-within {
+      border-color: var(--solar);
+      box-shadow: 0 0 0 2px rgba(245, 225, 74, 0.22);
+    }
+
     .waitlist-form input[type="email"] {
       flex: 1;
       background: transparent;
@@ -239,7 +244,7 @@
     .platform-label strong {
       font-size: 12px;
       font-weight: 600;
-      color: rgba(255,255,255,0.32);
+      color: rgba(255,255,255,0.70);
       transition: color 0.15s;
       letter-spacing: 0.01em;
     }
@@ -248,7 +253,7 @@
       font-family: var(--font-mono);
       font-size: 8px;
       letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.62);
       text-transform: uppercase;
       transition: color 0.15s;
     }
@@ -263,7 +268,7 @@
     }
 
     .platform-opt input[type="radio"]:checked + .platform-label small {
-      color: rgba(8, 7, 20, 0.55);
+      color: rgba(8, 7, 20, 0.82);
     }
 
     .platform-opt input[type="radio"]:focus-visible + .platform-label {
@@ -326,7 +331,7 @@
     }
 
     .footer-nav a {
-      color: rgba(255,255,255,0.38);
+      color: rgba(255,255,255,0.68);
       text-decoration: none;
       font-size: 12px;
       letter-spacing: 0.02em;
@@ -337,7 +342,7 @@
 
     .footer-privacy-note {
       font-size: 12px;
-      color: rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.68);
       max-width: 420px;
       line-height: 1.55;
       font-family: var(--font-mono);
@@ -346,7 +351,7 @@
 
     .footer-copy {
       font-size: 11px;
-      color: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.62);
       font-family: var(--font-mono);
       letter-spacing: 0.04em;
     }
@@ -362,6 +367,7 @@
       z-index: 100;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      overscroll-behavior: contain;
     }
 
     .modal.hidden { display: none; }
@@ -488,6 +494,24 @@
       overflow: hidden;
     }
 
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--solar);
+      outline-offset: 3px;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 440px) {
       .waitlist-form { flex-direction: column; }
@@ -504,8 +528,9 @@
   <!-- MODE CONFIG: change "waitlist" to "live" when the app launches -->
   <script>const SITE_MODE = "waitlist";</script>
 
+  <main>
   <!-- HERO: sky animation + headline only -->
-  <section id="hero" role="banner">
+  <section id="hero">
     <canvas id="sky-canvas" aria-hidden="true"></canvas>
 
     <div class="hero-content">
@@ -518,10 +543,11 @@
   <!-- CTA SECTION: dark zone, clearly below the hero sky -->
   <section id="cta-section">
     <div class="container">
-      <p class="free-year-hook">First 20 testers get a free year.</p>
+      <p class="free-year-hook">Join the launch waitlist.</p>
       <div id="cta-zone"></div>
     </div>
   </section>
+  </main>
 
   <!-- FOOTER -->
   <footer>
@@ -540,7 +566,7 @@
     <div class="modal-box">
       <div class="modal-check" aria-hidden="true">&#10003;</div>
       <h3 id="modal-heading">You're on the list.</h3>
-      <p id="modal-body">We'll reach out when testing opens. The first 20 testers get a free year.</p>
+      <p id="modal-body">We'll email you when SunPlanner is ready for your phone.</p>
       <button id="modal-close">Got it</button>
     </div>
   </div>
@@ -548,9 +574,10 @@
   <!-- CONFIRMATION MODAL: shown before submit to collect name + confirm platform -->
   <div id="confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-heading">
     <div class="modal-box">
-      <h3 id="confirm-heading">Almost there</h3>
+      <h2 id="confirm-heading">Almost there</h2>
       <p id="confirm-body">Signing up on Android.</p>
-      <input type="text" id="confirm-name" class="confirm-name-input" placeholder="First name (optional)" autocomplete="given-name" maxlength="80">
+      <label for="confirm-name" class="sr-only">First name (optional)</label>
+      <input type="text" id="confirm-name" name="name" class="confirm-name-input" placeholder="First name (optional)" autocomplete="given-name" spellcheck="false" maxlength="80">
       <input type="text" id="confirm-website" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="confirm-actions">
         <button id="confirm-yes" class="btn-confirm">I'm in</button>
@@ -574,16 +601,16 @@
         '<div class="platform-toggle" role="group" aria-label="Select your platform">' +
           '<label class="platform-opt">' +
             '<input type="radio" name="platform" value="android" checked>' +
-            '<span class="platform-label"><strong>Android</strong><small>Beta&nbsp;now</small></span>' +
+            '<span class="platform-label"><strong>Android</strong><small>Waitlist&nbsp;open</small></span>' +
           '</label>' +
           '<label class="platform-opt">' +
             '<input type="radio" name="platform" value="iphone">' +
-            '<span class="platform-label"><strong>iPhone</strong><small>Coming&nbsp;next</small></span>' +
+            '<span class="platform-label"><strong>iPhone</strong><small>Waitlist&nbsp;open</small></span>' +
           '</label>' +
         '</div>' +
         '<form class="waitlist-form" id="waitlist-form" novalidate>' +
           '<label for="email-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Email address</label>' +
-          '<input type="email" id="email-input" name="email" placeholder="your@email.com" autocomplete="email" required>' +
+          '<input type="email" id="email-input" name="email" placeholder="you@example.com" autocomplete="email" spellcheck="false" required>' +
           '<button type="submit">Join waitlist</button>' +
         '</form>' +
         '<p class="form-note">No spam</p>';
@@ -624,14 +651,23 @@
       });
     }
 
+    function currentAttribution() {
+      var params = new URLSearchParams(window.location.search);
+      return {
+        source: params.get('src') || params.get('utm_source') || 'direct',
+        medium: params.get('medium') || params.get('utm_medium') || ((params.get('src') || params.get('utm_source')) ? 'referral' : 'direct'),
+        landing_path: window.location.pathname,
+      };
+    }
+
     function doSubmit(email, platform, name, website, btn, emailInput) {
-      btn.textContent = 'Sending...';
+      btn.textContent = 'Sending…';
       btn.disabled = true;
 
       fetch('/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, platform: platform, name: name || null, website: website || '' }),
+        body: JSON.stringify(Object.assign({ email: email, platform: platform, name: name || null, website: website || '' }, currentAttribution())),
       })
         .then(function (res) {
           if (!res.ok) return res.json().then(function (d) { throw new Error(d.error || 'Submission failed.'); });
@@ -641,7 +677,7 @@
           emailInput.value = '';
           document.getElementById('modal-body').textContent = platform === 'iphone'
             ? "We'll reach out when the iPhone build is ready for testing."
-            : "We'll reach out when the Android beta opens.";
+            : "We'll reach out when SunPlanner is available on Google Play.";
           openModal();
         })
         .catch(function (err) {
@@ -659,6 +695,7 @@
       if (!el) {
         el = document.createElement('p');
         el.className = 'form-error';
+        el.setAttribute('role', 'alert');
         ctaZone.appendChild(el);
       }
       el.textContent = msg;
@@ -724,6 +761,7 @@
     var cycle = 0.13;
     var lastTs = null;
     var CYCLE_SECS = 28;
+    var motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     var SKY = [
       [0.00, [8,   6,  20], [16, 12, 34]],
@@ -918,21 +956,34 @@
       H = canvas.height = canvas.offsetHeight;
     }
 
+    function drawScene(t) {
+      drawSky(t);
+      drawStars(t);
+      drawSun(t);
+      drawPowerCurve(t);
+      drawGround(t);
+    }
+
     function frame(ts) {
+      if (motionQuery.matches) {
+        lastTs = null;
+        drawScene(0.5);
+        return;
+      }
       if (!lastTs) lastTs = ts;
       var dt = Math.min((ts - lastTs) / 1000, 0.05);
       lastTs = ts;
       cycle = (cycle + dt / CYCLE_SECS) % 1;
-      drawSky(cycle);
-      drawStars(cycle);
-      drawSun(cycle);
-      drawPowerCurve(cycle);
-      drawGround(cycle);
+      drawScene(cycle);
       requestAnimationFrame(frame);
     }
 
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', function () {
+      resize();
+      if (motionQuery.matches) drawScene(0.5);
+    });
+    motionQuery.addEventListener('change', function () { requestAnimationFrame(frame); });
     requestAnimationFrame(frame);
 
   }());

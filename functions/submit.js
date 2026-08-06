@@ -1,6 +1,20 @@
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_SECONDS = 600; // 10 minutes
 
+function optionalCampaignValue(value, maxLength) {
+  if (typeof value !== 'string') return null;
+  const clean = value.trim();
+  if (!clean || clean.length > maxLength || !/^[a-zA-Z0-9._:/-]+$/.test(clean)) return null;
+  return clean;
+}
+
+function optionalLandingPath(value) {
+  if (typeof value !== 'string') return null;
+  const clean = value.trim();
+  if (!clean || clean.length > 300 || !clean.startsWith('/') || /[\u0000-\u001f\u007f?#]/.test(clean)) return null;
+  return clean;
+}
+
 // KV-based limiter, not the Workers ratelimit binding: the binding's `period`
 // field only accepts 10 or 60 seconds (verified against Cloudflare docs
 // 2026-07-02), so it can't express a 10-minute window. Fixed-window counter,
@@ -33,9 +47,24 @@ export async function onRequestPost(context) {
     );
   }
 
+  const announcedLength = Number(request.headers.get('Content-Length') || 0);
+  if (announcedLength > 4096) {
+    return Response.json({ success: false, error: 'Request is too large.' }, { status: 413 });
+  }
+
+  let rawBody;
+  try {
+    rawBody = await request.text();
+  } catch {
+    return Response.json({ success: false, error: 'Invalid request body.' }, { status: 400 });
+  }
+  if (new TextEncoder().encode(rawBody).byteLength > 4096) {
+    return Response.json({ success: false, error: 'Request is too large.' }, { status: 413 });
+  }
+
   let data;
   try {
-    data = await request.json();
+    data = JSON.parse(rawBody);
   } catch {
     return Response.json({ success: false, error: 'Invalid JSON.' }, { status: 400 });
   }
@@ -68,10 +97,25 @@ export async function onRequestPost(context) {
     name = name.replace(/^[=+\-@\t\r]+/, '').trim() || null;
   }
 
+  // Campaign fields are deliberately small, optional, and parameterized. They
+  // describe the website visit; they are not trusted as commands or URLs.
+  const source = optionalCampaignValue(data.source, 100);
+  const medium = optionalCampaignValue(data.medium, 60);
+  const landingPath = optionalLandingPath(data.landing_path);
+
   try {
-    await env.DB.prepare(
-      'INSERT INTO signups (email, platform, name) VALUES (?, ?, ?)'
-    ).bind(email, platform, name || null).run();
+    try {
+      await env.DB.prepare(
+        'INSERT INTO signups (email, platform, name, campaign_source, campaign_medium, landing_path) VALUES (?, ?, ?, ?, ?, ?)'
+      ).bind(email, platform, name || null, source, medium, landingPath).run();
+    } catch (schemaError) {
+      // Safe deployment ordering fallback: if code reaches an environment before
+      // migration 0002, signup still works and only attribution is omitted.
+      if (!String(schemaError?.message || '').includes('no column named')) throw schemaError;
+      await env.DB.prepare(
+        'INSERT INTO signups (email, platform, name) VALUES (?, ?, ?)'
+      ).bind(email, platform, name || null).run();
+    }
   } catch (err) {
     // Duplicate (email, platform) pair means already signed up -- treat as success
     if (err.message && err.message.includes('UNIQUE constraint failed')) {

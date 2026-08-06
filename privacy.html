@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080714">
   <title>SunPlanner: Privacy Policy</title>
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { color-scheme: dark; }
     :root {
       --solar: #F5E14A;
       --night: #080714;
@@ -41,7 +43,7 @@
       font-weight: 500;
     }
     header span {
-      color: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.68);
       font-size: 12px;
     }
     main {
@@ -66,7 +68,7 @@
     .updated {
       font-family: var(--font-mono);
       font-size: 11px;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.68);
       margin-bottom: 52px;
     }
     h2 {
@@ -83,8 +85,9 @@
     }
     ul { padding-left: 20px; margin-bottom: 14px; }
     li { margin-bottom: 6px; }
-    a { color: var(--solar); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--solar); text-decoration: underline; text-underline-offset: 2px; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 2px solid var(--solar); outline-offset: 3px; }
     .location-notice {
       background: rgba(245, 225, 74, 0.06);
       border: 1px solid rgba(245, 225, 74, 0.15);
@@ -116,7 +119,7 @@
   <main>
     <p class="page-label">Legal</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: July 5, 2026</p>
+    <p class="updated">Last updated: August 6, 2026</p>
 
     <div class="location-notice">
       <p>SunPlanner needs your location to forecast solar production for the exact spot you are parked. To do that, your coordinates are sent to the weather and map services listed in section 3. SunPlanner has no user accounts, so your location is never tied to a name or profile. Your equipment details and production history stay on your device and are never uploaded.</p>
@@ -130,7 +133,8 @@
       <li><strong>Your equipment and production history (stays on your device).</strong> Details you enter (panel wattage, inverter type, battery setup) and your calibration and production history are stored only on your device. They are never sent to us or anyone else.</li>
       <li><strong>Crash and diagnostic data.</strong> If the app crashes or hits an error, we receive a technical report (what went wrong, your device model, operating system version, and app version) through Sentry. These reports contain no name, no email, and no location, and we are turning off IP address collection as well.</li>
       <li><strong>App update checks.</strong> When the app starts, it checks our update service (Expo) for a newer version. That check sends only the platform and app version. No personal data, no location.</li>
-      <li><strong>Waitlist email (website only).</strong> If you enter your email on the SunPlanner website to join the waitlist, we store it to let you know when testing or launch opens. It is used only for SunPlanner messages.</li>
+      <li><strong>Waitlist details (website only).</strong> If you join the SunPlanner waitlist, we store your email address, Android or iPhone choice, and your name only if you choose to provide it. We also save the campaign source, channel, and first page from the link you used. Those campaign labels help us understand which of our own links and outreach led to a signup. They do not include your location, IP address, device identity, or a fingerprint.</li>
+      <li><strong>Website visit counts.</strong> The website uses Cloudflare Web Analytics to count visits and page loads. It does not use a tracking cookie or an advertising profile.</li>
     </ul>
 
     <h2>2. Why we use it</h2>
@@ -138,7 +142,8 @@
       <li>Location is used only to compute the forecast and sun position for your current or saved spot, and to center the in-app map on you.</li>
       <li>Crash and diagnostic data is used to find and fix bugs and keep the app stable.</li>
       <li>The update check is used to deliver app improvements.</li>
-      <li>Your waitlist email is used to send tester invitations and launch news. You can unsubscribe or ask us to delete it at any time.</li>
+      <li>Your waitlist details are used to send tester invitations and launch news, separate Android and iPhone interest, and understand which SunPlanner links led to signups. You can unsubscribe or ask us to delete your record at any time.</li>
+      <li>Cookieless website visit counts help us understand whether the site is working and which pages people use.</li>
     </ul>
 
     <h2>3. Who receives your location</h2>
@@ -150,17 +155,18 @@
       <li><strong>Mapbox</strong> draws the in-app map. When a map is on screen, Mapbox receives the map area (centered on you) and standard map usage data. Mapbox provides its own opt-out within the map's attribution menu. <a href="https://www.mapbox.com/legal/privacy">mapbox.com/legal/privacy</a></li>
     </ul>
     <p>We also use <strong>Sentry</strong> for the crash reports described above (<a href="https://sentry.io/privacy/">sentry.io/privacy</a>) and <strong>Expo</strong> for app update checks (<a href="https://expo.dev/privacy">expo.dev/privacy</a>). Neither receives your location.</p>
+    <p>The website stores waitlist records in Cloudflare's infrastructure and uses Cloudflare Web Analytics for cookieless visit and page-load counts. We do not share waitlist details or campaign labels with advertising networks.</p>
     <p>We do not sell, rent, or trade your information, and we do not share it with anyone for advertising.</p>
 
     <h2>4. What never leaves your device</h2>
     <p>Your saved equipment specs, your calibration data, and your production history live only in the app's local storage on your phone. They are not synced to a server, not backed up to us, and not shared. If you uninstall the app, that data is gone.</p>
 
     <h2>5. How long we keep things</h2>
-    <p>We do not store your location on our servers, so there is nothing on our side to retain there. Crash and diagnostic reports are kept only as long as needed to fix problems. Waitlist email addresses are kept until you ask us to remove them, or until 12 months after the app launches publicly, whichever comes first.</p>
+    <p>We do not store your location on our servers, so there is nothing on our side to retain there. Crash and diagnostic reports are kept only as long as needed to fix problems. Waitlist records, including platform choice, optional name, and campaign labels, are kept until you ask us to remove them, or until 12 months after the app launches publicly, whichever comes first.</p>
 
     <h2>6. Your choices and your rights</h2>
     <p>You control the location permission in your device settings and can turn it off at any time (the forecast will not work without it). You can clear your on-device data by clearing the app's storage or uninstalling it.</p>
-    <p>To have your waitlist email removed, or to ask any question about your data, email us at the address below and we will act within 7 days. If you are in the European Economic Area or the UK, you have additional rights under GDPR (access, correction, deletion, and portability); contact us to use them.</p>
+    <p>To access, correct, export, or delete your waitlist record, or to ask any question about your data, email us at the address below and we will act within 7 days. If you are in the European Economic Area or the UK, you have additional rights under GDPR (access, correction, deletion, and portability); contact us to use them.</p>
 
     <h2>7. Children</h2>
     <p>SunPlanner is not directed at children under 13, and we do not knowingly collect information from them. If you believe a child has provided us information, contact us and we will delete it.</p>
